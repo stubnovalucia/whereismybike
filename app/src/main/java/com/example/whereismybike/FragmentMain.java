@@ -84,6 +84,14 @@ public class FragmentMain extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentSettings);
             }
         });
+
+        Button markLocationButton = view.findViewById(R.id.markLocationButton);
+        markLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_markLocationFragment);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

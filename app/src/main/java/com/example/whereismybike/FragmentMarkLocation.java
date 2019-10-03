@@ -18,12 +18,12 @@ import android.widget.Button;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentSettings.OnFragmentInteractionListener} interface
+ * {@link FragmentMarkLocation.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentSettings#newInstance} factory method to
+ * Use the {@link FragmentMarkLocation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentSettings extends Fragment {
+public class FragmentMarkLocation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,7 +35,7 @@ public class FragmentSettings extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentSettings() {
+    public FragmentMarkLocation() {
         // Required empty public constructor
     }
 
@@ -45,11 +45,11 @@ public class FragmentSettings extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentSettings.
+     * @return A new instance of fragment FragmentMarkLocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSettings newInstance(String param1, String param2) {
-        FragmentSettings fragment = new FragmentSettings();
+    public static FragmentMarkLocation newInstance(String param1, String param2) {
+        FragmentMarkLocation fragment = new FragmentMarkLocation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,21 +70,20 @@ public class FragmentSettings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_settings, container, false);
+        return inflater.inflate(R.layout.fragment_mark_location, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button closeSettingsButton = view.findViewById(R.id.closeSettingsButton);
-        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
+        Button markLocationButton = view.findViewById(R.id.markLocationButton);
+        markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSettings_to_fragmentMain);
+                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
