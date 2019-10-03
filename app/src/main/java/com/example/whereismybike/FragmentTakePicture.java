@@ -90,7 +90,7 @@ public class FragmentTakePicture extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentSettings);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentTakePicture_to_savedLocationFragment);
             }
         });
     }

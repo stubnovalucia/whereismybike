@@ -82,7 +82,7 @@ public class FragmentSavePicture extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentSettings);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_savedLocationFragment);
             }
         });
 
@@ -98,7 +98,7 @@ public class FragmentSavePicture extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentSettings);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_savedLocationFragment);
             }
         });
     }
