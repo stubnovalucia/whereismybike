@@ -40,4 +40,23 @@
         android:name="com.example.whereismybike.FragmentSavedLocation"
         android:label="fragment_saved_location"
         tools:layout="@layout/fragment_saved_location" />
+        tools:layout="@layout/fragment_fragment_settings" />
+    <fragment
+        android:id="@+id/fragmentTakePicture"
+        android:name="com.example.whereismybike.FragmentTakePicture"
+        android:label="fragment_fragment_take_picture"
+        tools:layout="@layout/fragment_fragment_take_picture" >
+        <action
+            android:id="@+id/action_fragmentTakePicture_to_fragmentSavePicture"
+            app:destination="@id/fragmentSavePicture" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSavePicture"
+        android:name="com.example.whereismybike.FragmentSavePicture"
+        android:label="fragment_fragment_save_picture"
+        tools:layout="@layout/fragment_fragment_save_picture" >
+        <action
+            android:id="@+id/action_fragmentSavePicture_to_fragmentTakePicture2"
+            app:destination="@id/fragmentTakePicture" />
+    </fragment>
 </navigation>
