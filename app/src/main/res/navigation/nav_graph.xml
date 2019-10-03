@@ -3,26 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_host_fragment">
+    app:startDestination="@id/fragmentMain">
 
     <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_graph" >
+        android:id="@+id/fragmentMain"
+        android:name="com.example.whereismybike.FragmentMain"
+        android:label="fragment_fragment_main"
+        tools:layout="@layout/fragment_fragment_main" >
         <action
-            android:id="@+id/action_nav_host_fragment_to_placeholder2"
-            app:destination="@id/placeholder2" />
+            android:id="@+id/action_fragmentMain_to_fragmentSettings"
+            app:destination="@id/fragmentSettings" />
     </fragment>
     <fragment
-        android:id="@+id/placeholder2"
-        android:name="androidx.fragment.app.Fragment" />
-
+        android:id="@+id/fragmentSettings"
+        android:name="com.example.whereismybike.FragmentSettings"
+        android:label="fragment_fragment_settings"
+        tools:layout="@layout/fragment_fragment_settings" />
 </navigation>
