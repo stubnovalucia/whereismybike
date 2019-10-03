@@ -47,7 +47,6 @@
             android:id="@+id/action_savedLocationFragment_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
-        tools:layout="@layout/fragment_fragment_settings" />
     <fragment
         android:id="@+id/fragmentTakePicture"
         android:name="com.example.whereismybike.FragmentTakePicture"
