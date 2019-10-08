@@ -9,11 +9,12 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
+        android:id="@+id/savedLocationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Saved Location Fragment"
-        tools:layout_editor_absoluteX="-40dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:text="@string/saved_location_fragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/takePictureButton"
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="132dp"
         android:layout_marginTop="308dp"
-        android:text="Take a picture"
+        android:text="@string/take_picture_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +32,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="132dp"
         android:layout_marginTop="242dp"
-        android:text="Add a note"
+        android:text="@string/add_note_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +41,7 @@
         android:layout_width="412dp"
         android:layout_height="110dp"
         android:layout_marginBottom="120dp"
-        android:text="Save it"
+        android:text="@string/save_location_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

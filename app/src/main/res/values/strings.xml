@@ -1,6 +1,28 @@
 <resources>
     <string name="app_name">whereismybike</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    //Main Fragment
+    <string name="main_fragment">Main Fragment</string>
+    <string name="settings_button">Settings</string>
+    <string name="where_is_my_bike">Where is my bike</string>
+    <string name="mark_it_button">Mark it</string>
+
+    //Save Picture Fragment
+    <string name="save_button">Save</string>
+    <string name="retake_it_button">Retake it</string>
+
+    //Settings Fragment
+
+    //Take Picture Fragment
+
+    //Mark Location Fragment
+    <string name="mark_location_fragment">Mark Location Fragment</string>
+    <string name="mark_location_button">Mark it</string>
+
+    //Saved Location Fragment
+    <string name="saved_location_fragment">Saved Location Fragment</string>
+    <string name="take_picture_button">Take a picture</string>
+    <string name="add_note_button">Add a note</string>
+    <string name="save_location_button">Save it</string>
+
 </resources>

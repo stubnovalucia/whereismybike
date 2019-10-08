@@ -7,32 +7,33 @@
     tools:context=".FragmentSavePicture">
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="496dp"
-        android:text="Save"
+        android:text="@string/save_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/retakeit"
+        android:id="@+id/retakeItButton"
         android:layout_width="349dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="44dp"
         android:layout_marginTop="412dp"
         android:drawableLeft="@android:drawable/ic_menu_revert"
-        android:text="Retake it"
+        android:text="@string/retake_it_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/cancel"
+        android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="324dp"
         android:layout_marginTop="64dp"
+        android:contentDescription="cancel"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

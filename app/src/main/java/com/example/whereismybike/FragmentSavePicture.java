@@ -78,7 +78,7 @@ public class FragmentSavePicture extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button save = view.findViewById(R.id.save);
+        Button save = view.findViewById(R.id.saveButton);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +86,7 @@ public class FragmentSavePicture extends Fragment {
             }
         });
 
-        Button retakeit = view.findViewById(R.id.retakeit);
+        Button retakeit = view.findViewById(R.id.retakeItButton);
         retakeit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +94,7 @@ public class FragmentSavePicture extends Fragment {
             }
         });
 
-        ImageButton cancel = view.findViewById(R.id.cancel);
+        ImageButton cancel = view.findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
