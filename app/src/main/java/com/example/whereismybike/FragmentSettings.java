@@ -1,3 +1,11 @@
+/**
+ * FragmentSettings class: Fragment that allows users to change the settings of the app.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;

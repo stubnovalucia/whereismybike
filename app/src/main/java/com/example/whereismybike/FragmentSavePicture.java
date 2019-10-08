@@ -1,3 +1,11 @@
+/**
+ * FragmentSavePicture class: Fragment for previewing the taken picture.
+ *
+ * @author Dominykas Rumsa
+ *
+ * Dominykas Rumsa: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;

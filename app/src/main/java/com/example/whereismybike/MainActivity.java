@@ -1,3 +1,13 @@
+/**
+ * MainActivity class: activity that is opened when the app is launched.
+ *
+ * @author Dominykas Rumsa
+ * @author Lucia Stubnova
+ *
+ * Dominykas Rumsa: Main author
+ * Lucia Stubnova: Added to main class fragment implementation
+ *
+ */
 package com.example.whereismybike;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -5,7 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity  implements FragmentMarkLocation.OnFragmentInteractionListener, FragmentMain.OnFragmentInteractionListener, FragmentSavedLocation.OnFragmentInteractionListener, FragmentSavePicture.OnFragmentInteractionListener, FragmentSettings.OnFragmentInteractionListener, FragmentTakePicture.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity  implements FragmentMarkLocation.OnFragmentInteractionListener,
+        FragmentMain.OnFragmentInteractionListener,
+        FragmentSavedLocation.OnFragmentInteractionListener,
+        FragmentSavePicture.OnFragmentInteractionListener,
+        FragmentSettings.OnFragmentInteractionListener,
+        FragmentTakePicture.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

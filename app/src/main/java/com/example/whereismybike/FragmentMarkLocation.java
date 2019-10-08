@@ -1,3 +1,11 @@
+/**
+ * FragmentMarkLocation class: Fragment that will have a map view and a button for saving location.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;

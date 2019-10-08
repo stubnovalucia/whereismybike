@@ -1,3 +1,11 @@
+/**
+ * FragmentSavedLocation: Fragment displaying location and other additional information about the parked bike.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;

@@ -1,3 +1,11 @@
+/**
+ * FragmentMain class: Initial application element that will be shown at start up.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;

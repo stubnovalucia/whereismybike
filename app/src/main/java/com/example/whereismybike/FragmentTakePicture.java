@@ -1,3 +1,11 @@
+/**
+ * FragmentTakePicture class: Fragment that allows users to take a picture of the parked bike.
+ *
+ * @author Dominykas Rumsa
+ *
+ * Dominykas Rumsa: Main author
+ *
+ */
 package com.example.whereismybike;
 
 import android.content.Context;
