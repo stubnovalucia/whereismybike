@@ -8,16 +8,20 @@
     <string name="mark_it_button">Mark it</string>
 
     //Save Picture Fragment
+    <string name="save_picture_fragment">Save Picture Fragment</string>
     <string name="save_button">Save</string>
     <string name="retake_it_button">Retake it</string>
 
     //Settings Fragment
+    <string name="settings_fragment">Settings Fragment</string>
+    <string name="settings">Settings</string>
 
     //Take Picture Fragment
+    <string name="take_picture_fragment">Take Picture Fragment</string>
+    <string name="flash">Flash</string>
 
     //Mark Location Fragment
     <string name="mark_location_fragment">Mark Location Fragment</string>
-    <string name="mark_location_button">Mark it</string>
 
     //Saved Location Fragment
     <string name="saved_location_fragment">Saved Location Fragment</string>
