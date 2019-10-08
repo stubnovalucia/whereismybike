@@ -94,15 +94,15 @@ public class FragmentSavePicture extends Fragment {
             }
         });
 
-        Button retakeit = view.findViewById(R.id.retakeItButton);
-        retakeit.setOnClickListener(new View.OnClickListener() {
+        Button retakeIt = view.findViewById(R.id.retakeItButton);
+        retakeIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_fragmentTakePicture2);
             }
         });
 
-        ImageButton cancel = view.findViewById(R.id.cancelButton);
+        Button cancel = view.findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

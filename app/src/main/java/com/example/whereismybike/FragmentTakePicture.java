@@ -94,7 +94,7 @@ public class FragmentTakePicture extends Fragment {
             }
         });
 
-        ImageButton cancel = view.findViewById(R.id.cancelButton);
+        Button cancel = view.findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
