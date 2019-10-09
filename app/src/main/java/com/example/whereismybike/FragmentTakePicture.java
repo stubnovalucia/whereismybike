@@ -1,11 +1,3 @@
-/**
- * FragmentTakePicture class: Fragment that allows users to take a picture of the parked bike.
- *
- * @author Dominykas Rumsa
- *
- * Dominykas Rumsa: Main author
- *
- */
 package com.example.whereismybike;
 
 import android.content.Context;
@@ -25,12 +17,12 @@ import android.widget.ImageButton;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentTakePicture.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentTakePicture#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentTakePicture class: Fragment that allows users to take a picture of the parked bike.
+ *
+ * @author Dominykas Rumsa
+ *
+ * Dominykas Rumsa: Main author
+ *
  */
 public class FragmentTakePicture extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

@@ -25,12 +25,12 @@ import android.widget.ImageButton;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentSavePicture.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentSavePicture#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentSavePicture class: Fragment for previewing the taken picture.
+ *
+ * @author Dominykas Rumsa
+ *
+ * Dominykas Rumsa: Main author
+ *
  */
 public class FragmentSavePicture extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

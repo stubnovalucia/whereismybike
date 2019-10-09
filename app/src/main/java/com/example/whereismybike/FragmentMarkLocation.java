@@ -1,11 +1,3 @@
-/**
- * FragmentMarkLocation class: Fragment that will have a map view and a button for saving location.
- *
- * @author Lucia Stubnova
- *
- * Lucia Stubnova: Main author
- *
- */
 package com.example.whereismybike;
 
 import android.content.Context;
@@ -24,12 +16,12 @@ import android.widget.Button;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentMarkLocation.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentMarkLocation#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentMarkLocation class: Fragment that will have a map view and a button for saving location.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
  */
 public class FragmentMarkLocation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

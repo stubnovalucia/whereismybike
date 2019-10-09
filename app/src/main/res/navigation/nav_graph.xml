@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_fragmentMain_to_markLocationFragment"
             app:destination="@id/markLocationFragment" />
+        <action
+            android:id="@+id/action_fragmentMain_to_fragmentRetrieveLocation"
+            app:destination="@id/fragmentRetrieveLocation" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSettings"
@@ -70,5 +73,14 @@
         <action
             android:id="@+id/action_fragmentSavePicture_to_savedLocationFragment"
             app:destination="@id/savedLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRetrieveLocation"
+        android:name="com.example.whereismybike.FragmentRetrieveLocation"
+        android:label="fragment_fragment_retrieve_location"
+        tools:layout="@layout/fragment_fragment_retrieve_location" >
+        <action
+            android:id="@+id/action_fragmentRetrieveLocation_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
     </fragment>
 </navigation>

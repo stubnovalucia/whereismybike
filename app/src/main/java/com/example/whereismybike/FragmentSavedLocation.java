@@ -1,11 +1,3 @@
-/**
- * FragmentSavedLocation: Fragment displaying location and other additional information about the parked bike.
- *
- * @author Lucia Stubnova
- *
- * Lucia Stubnova: Main author
- *
- */
 package com.example.whereismybike;
 
 import android.content.Context;
@@ -24,12 +16,12 @@ import android.widget.Button;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentSavedLocation.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentSavedLocation#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentSavedLocation: Fragment displaying location and other additional information about the parked bike.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
  */
 public class FragmentSavedLocation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +34,7 @@ public class FragmentSavedLocation extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    OnDataPass saveBikeDataPasser;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -85,6 +78,7 @@ public class FragmentSavedLocation extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //listener for take a picture button
         Button takePictureButton = view.findViewById(R.id.takePictureButton);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,10 +87,12 @@ public class FragmentSavedLocation extends Fragment {
             }
         });
 
+        //listener for save location button
         Button saveLocationButton = view.findViewById(R.id.saveLocationButton);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveBike(true);
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
@@ -115,6 +111,7 @@ public class FragmentSavedLocation extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            saveBikeDataPasser = (OnDataPass) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -141,4 +138,16 @@ public class FragmentSavedLocation extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    /**
+     * Interface for passing data to the main activity - to be done
+     */
+    public interface OnDataPass {
+        void onSaveBike(Boolean savedBike);
+    }
+
+    public void saveBike(Boolean savedBike) {
+        saveBikeDataPasser.onSaveBike(savedBike);
+    }
+
 }

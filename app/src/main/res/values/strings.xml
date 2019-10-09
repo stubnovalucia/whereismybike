@@ -6,6 +6,7 @@
     <string name="settings_button">Settings</string>
     <string name="where_is_my_bike">Where is my bike</string>
     <string name="mark_it_button">Mark it</string>
+    <string name="show_it_button">Show it</string>
 
     //Save Picture Fragment
     <string name="save_picture_fragment">Save Picture Fragment</string>
@@ -22,6 +23,11 @@
 
     //Mark Location Fragment
     <string name="mark_location_fragment">Mark Location Fragment</string>
+
+    //Retrieve Location Fragment
+    <string name="retrieve_location_fragment">Retrieve Location Fragment</string>
+    <string name="get_directions_button">Get directions</string>
+    <string name="found_it_button">Found it</string>
 
     //Saved Location Fragment
     <string name="saved_location_fragment">Saved Location Fragment</string>

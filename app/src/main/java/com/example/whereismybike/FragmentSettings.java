@@ -1,11 +1,3 @@
-/**
- * FragmentSettings class: Fragment that allows users to change the settings of the app.
- *
- * @author Lucia Stubnova
- *
- * Lucia Stubnova: Main author
- *
- */
 package com.example.whereismybike;
 
 import android.content.Context;
@@ -24,12 +16,12 @@ import android.widget.Button;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentSettings.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentSettings#newInstance} factory method to
- * create an instance of this fragment.
+ * FragmentSettings class: Fragment that allows users to change the settings of the app.
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
  */
 public class FragmentSettings extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
