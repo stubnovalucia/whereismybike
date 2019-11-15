@@ -1,6 +1,9 @@
 package com.example.whereismybike;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,6 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -23,7 +39,7 @@ import android.widget.Button;
  * Lucia Stubnova: Main author
  *
  */
-public class FragmentMarkLocation extends Fragment {
+public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,6 +50,10 @@ public class FragmentMarkLocation extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    GoogleMap map;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     public FragmentMarkLocation() {
         // Required empty public constructor
@@ -69,8 +89,8 @@ public class FragmentMarkLocation extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mark_location, container, false);
+        View v = inflater.inflate(R.layout.fragment_mark_location, container, false);
+        return v;
     }
 
     @Override
@@ -84,6 +104,10 @@ public class FragmentMarkLocation extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,6 +132,37 @@ public class FragmentMarkLocation extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng markerPosition = new LatLng(56.168662,10.117873);
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(markerPosition).title("Bicycle is here!");
+        map.addMarker(marker).setDraggable(true);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(markerPosition).zoom(17).build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        //Get address
+        try {
+            MainActivity main = (MainActivity) getActivity();
+            Geocoder geo = new Geocoder(main, Locale.getDefault());
+            List<Address> addresses = geo.getFromLocation(56.168662, 10.117873, 1);
+            if (addresses.isEmpty()) {
+                System.out.println("Waiting for Location");
+            }
+            else {
+                if (addresses.size() > 0) {
+                    Toast.makeText(main, "Address:- " + addresses.get(0).getThoroughfare() + " " + addresses.get(0).getFeatureName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+//        map.setMyLocationEnabled(true);
+//        map.getUiSettings().setMyLocationButtonEnabled(true);
     }
 
     /**
