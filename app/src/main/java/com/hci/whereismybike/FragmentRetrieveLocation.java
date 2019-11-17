@@ -1,4 +1,4 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import android.content.Context;
 import android.net.Uri;

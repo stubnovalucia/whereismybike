@@ -1,4 +1,4 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import org.junit.Test;
 

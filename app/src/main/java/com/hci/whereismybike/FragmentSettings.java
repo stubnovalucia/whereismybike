@@ -1,4 +1,4 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import android.content.Context;
 import android.net.Uri;
@@ -16,14 +16,14 @@ import android.widget.Button;
 
 
 /**
- * FragmentSavedLocation: Fragment displaying location and other additional information about the parked bike.
+ * FragmentSettings class: Fragment that allows users to change the settings of the app.
  *
  * @author Lucia Stubnova
  *
  * Lucia Stubnova: Main author
  *
  */
-public class FragmentSavedLocation extends Fragment {
+public class FragmentSettings extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,9 +34,8 @@ public class FragmentSavedLocation extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    OnDataPass saveBikeDataPasser;
 
-    public FragmentSavedLocation() {
+    public FragmentSettings() {
         // Required empty public constructor
     }
 
@@ -46,11 +45,11 @@ public class FragmentSavedLocation extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentSavedLocation.
+     * @return A new instance of fragment FragmentSettings.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSavedLocation newInstance(String param1, String param2) {
-        FragmentSavedLocation fragment = new FragmentSavedLocation();
+    public static FragmentSettings newInstance(String param1, String param2) {
+        FragmentSettings fragment = new FragmentSettings();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -71,29 +70,18 @@ public class FragmentSavedLocation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_saved_location, container, false);
+        return inflater.inflate(R.layout.fragment_fragment_settings, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //listener for take a picture button
-        Button takePictureButton = view.findViewById(R.id.takePictureButton);
-        takePictureButton.setOnClickListener(new View.OnClickListener() {
+        Button closeSettingsButton = view.findViewById(R.id.closeSettingsButton);
+        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentTakePicture);
-            }
-        });
-
-        //listener for save location button
-        Button saveLocationButton = view.findViewById(R.id.saveLocationButton);
-        saveLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveBike(true);
-                Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentSettings_to_fragmentMain);
             }
         });
 
@@ -111,7 +99,6 @@ public class FragmentSavedLocation extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            saveBikeDataPasser = (OnDataPass) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -138,16 +125,4 @@ public class FragmentSavedLocation extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-    /**
-     * Interface for passing data to the main activity - to be done
-     */
-    public interface OnDataPass {
-        void onSaveBike(Boolean savedBike);
-    }
-
-    public void saveBike(Boolean savedBike) {
-        saveBikeDataPasser.onSaveBike(savedBike);
-    }
-
 }

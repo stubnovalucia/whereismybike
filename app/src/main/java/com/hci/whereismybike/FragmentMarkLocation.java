@@ -1,14 +1,9 @@
-/**
- * FragmentSavePicture class: Fragment for previewing the taken picture.
- *
- * @author Dominykas Rumsa
- *
- * Dominykas Rumsa: Main author
- *
- */
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,18 +16,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+
+import java.util.List;
+import java.util.Locale;
 
 
 /**
- * FragmentSavePicture class: Fragment for previewing the taken picture.
+ * FragmentMarkLocation class: Fragment that will have a map view and a button for saving location.
  *
- * @author Dominykas Rumsa
+ * @author Lucia Stubnova
  *
- * Dominykas Rumsa: Main author
+ * Lucia Stubnova: Main author
  *
  */
-public class FragmentSavePicture extends Fragment {
+public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +51,11 @@ public class FragmentSavePicture extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentSavePicture() {
+    GoogleMap map;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+
+    public FragmentMarkLocation() {
         // Required empty public constructor
     }
 
@@ -54,11 +65,11 @@ public class FragmentSavePicture extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentSavePicture.
+     * @return A new instance of fragment FragmentMarkLocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSavePicture newInstance(String param1, String param2) {
-        FragmentSavePicture fragment = new FragmentSavePicture();
+    public static FragmentMarkLocation newInstance(String param1, String param2) {
+        FragmentMarkLocation fragment = new FragmentMarkLocation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,37 +89,25 @@ public class FragmentSavePicture extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_save_picture, container, false);
+        View v = inflater.inflate(R.layout.fragment_mark_location, container, false);
+        return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button save = view.findViewById(R.id.saveButton);
-        save.setOnClickListener(new View.OnClickListener() {
+        Button markLocationButton = view.findViewById(R.id.markLocationButton);
+        markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_savedLocationFragment);
+                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
 
-        Button retakeIt = view.findViewById(R.id.retakeItButton);
-        retakeIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_fragmentTakePicture2);
-            }
-        });
 
-        Button cancel = view.findViewById(R.id.cancelButton);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_savedLocationFragment);
-            }
-        });
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -133,6 +132,37 @@ public class FragmentSavePicture extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng markerPosition = new LatLng(56.168662,10.117873);
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(markerPosition).title("Bicycle is here!");
+        map.addMarker(marker).setDraggable(true);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(markerPosition).zoom(17).build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        //Get address
+        try {
+            MainActivity main = (MainActivity) getActivity();
+            Geocoder geo = new Geocoder(main, Locale.getDefault());
+            List<Address> addresses = geo.getFromLocation(56.168662, 10.117873, 1);
+            if (addresses.isEmpty()) {
+                System.out.println("Waiting for Location");
+            }
+            else {
+                if (addresses.size() > 0) {
+                    Toast.makeText(main, "Address:- " + addresses.get(0).getThoroughfare() + " " + addresses.get(0).getFeatureName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+//        map.setMyLocationEnabled(true);
+//        map.getUiSettings().setMyLocationButtonEnabled(true);
     }
 
     /**
