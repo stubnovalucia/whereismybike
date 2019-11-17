@@ -58,7 +58,7 @@ public class FragmentSavedLocation extends Fragment {
      * @return A new instance of fragment FragmentSavedLocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSavedLocation newInstance(String param1, String param2) {
+    public static FragmentSavedLocation fragmentSavedLocation(String param1, String param2) {
         FragmentSavedLocation fragment = new FragmentSavedLocation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
