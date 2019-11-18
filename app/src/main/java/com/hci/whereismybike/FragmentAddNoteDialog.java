@@ -1,28 +1,29 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 
 /**
- * FragmentRetrieveLocation class: Fragment that will have a map view and a button for saving location.
- *
- * @author Lucia Stubnova
- *
- * Lucia Stubnova: Main author
- *
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link FragmentAddNoteDialog.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link FragmentAddNoteDialog#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class FragmentRetrieveLocation extends Fragment {
+public class FragmentAddNoteDialog extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +35,7 @@ public class FragmentRetrieveLocation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentRetrieveLocation() {
+    public FragmentAddNoteDialog() {
         // Required empty public constructor
     }
 
@@ -44,11 +45,11 @@ public class FragmentRetrieveLocation extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentRetrieveLocation.
+     * @return A new instance of fragment FragmentAddNoteDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentRetrieveLocation newInstance(String param1, String param2) {
-        FragmentRetrieveLocation fragment = new FragmentRetrieveLocation();
+    public static FragmentAddNoteDialog newInstance(String param1, String param2) {
+        FragmentAddNoteDialog fragment = new FragmentAddNoteDialog();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,22 +70,7 @@ public class FragmentRetrieveLocation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_retrieve_location, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        //listener for found it button
-        Button foundItButton = view.findViewById(R.id.foundItButton);
-        foundItButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
-            }
-        });
-
+        return inflater.inflate(R.layout.fragment_fragment_add_note_dialog, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -109,6 +95,25 @@ public class FragmentRetrieveLocation extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("hello")
+                .setPositiveButton("fire", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        return builder.create();
     }
 
     /**

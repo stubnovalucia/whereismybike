@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMain">
+    app:startDestination="@id/fragmentSignIn">
 
     <fragment
         android:id="@+id/fragmentMain"
-        android:name="com.example.whereismybike.FragmentMain"
+        android:name="com.hci.whereismybike.FragmentMain"
         android:label="fragment_fragment_main"
         tools:layout="@layout/fragment_fragment_main" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentSettings"
-        android:name="com.example.whereismybike.FragmentSettings"
+        android:name="com.hci.whereismybike.FragmentSettings"
         android:label="fragment_fragment_settings"
         tools:layout="@layout/fragment_fragment_settings" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/markLocationFragment"
-        android:name="com.example.whereismybike.FragmentMarkLocation"
+        android:name="com.hci.whereismybike.FragmentMarkLocation"
         android:label="fragment_mark_location"
         tools:layout="@layout/fragment_mark_location" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedLocationFragment"
-        android:name="com.example.whereismybike.FragmentSavedLocation"
+        android:name="com.hci.whereismybike.FragmentSavedLocation"
         android:label="fragment_saved_location"
         tools:layout="@layout/fragment_saved_location" >
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentTakePicture"
-        android:name="com.example.whereismybike.FragmentTakePicture"
+        android:name="com.hci.whereismybike.FragmentTakePicture"
         android:label="fragment_fragment_take_picture"
         tools:layout="@layout/fragment_fragment_take_picture" >
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentSavePicture"
-        android:name="com.example.whereismybike.FragmentSavePicture"
+        android:name="com.hci.whereismybike.FragmentSavePicture"
         android:label="fragment_fragment_save_picture"
         tools:layout="@layout/fragment_fragment_save_picture" >
         <action
@@ -76,11 +76,20 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentRetrieveLocation"
-        android:name="com.example.whereismybike.FragmentRetrieveLocation"
+        android:name="com.hci.whereismybike.FragmentRetrieveLocation"
         android:label="fragment_fragment_retrieve_location"
         tools:layout="@layout/fragment_fragment_retrieve_location" >
         <action
             android:id="@+id/action_fragmentRetrieveLocation_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSignIn"
+        android:name="com.hci.whereismybike.FragmentSignIn"
+        android:label="fragment_fragment_sign_in"
+        tools:layout="@layout/fragment_fragment_sign_in" >
+        <action
+            android:id="@+id/action_fragmentSignIn_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
 </navigation>

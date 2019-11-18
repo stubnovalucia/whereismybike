@@ -1,14 +1,12 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 
 /**
@@ -29,6 +27,7 @@ public class MainActivity extends AppCompatActivity  implements
         FragmentSettings.OnFragmentInteractionListener,
         FragmentTakePicture.OnFragmentInteractionListener,
         FragmentRetrieveLocation.OnFragmentInteractionListener,
+        FragmentSignIn.OnFragmentInteractionListener,
         FragmentSavedLocation.OnDataPass {
 
 
