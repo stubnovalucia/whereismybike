@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "563719171063-36hfonqo541dbmu5sur0mhsk14s6vuc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hci.whereismybike",
+            "certificate_hash": "a252f6c4c27a07a7091209892cf1e7d1920e1183"
+          }
+        },
+        {
           "client_id": "563719171063-2afr8atcs0g7p69bjcrsp2ue7gqbnert.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,7 +45,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAoBqFaMEMS5oJDHpuNDzWdMYrm_Qct8SI"
+          "current_key": "AIzaSyBYDWlJZwgMK8zcdmAnHnTA2LRe1-CkjBY"
         }
       ],
       "services": {

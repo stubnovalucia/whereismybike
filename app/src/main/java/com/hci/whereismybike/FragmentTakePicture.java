@@ -1,4 +1,4 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import android.content.Context;
 import android.net.Uri;
@@ -14,15 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+
 /**
- * FragmentRetrieveLocation class: Fragment that will have a map view and a button for saving location.
+ * FragmentTakePicture class: Fragment that allows users to take a picture of the parked bike.
  *
- * @author Lucia Stubnova
+ * @author Dominykas Rumsa
  *
- * Lucia Stubnova: Main author
+ * Dominykas Rumsa: Main author
  *
  */
-public class FragmentRetrieveLocation extends Fragment {
+public class FragmentTakePicture extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +35,7 @@ public class FragmentRetrieveLocation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentRetrieveLocation() {
+    public FragmentTakePicture() {
         // Required empty public constructor
     }
 
@@ -44,11 +45,11 @@ public class FragmentRetrieveLocation extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentRetrieveLocation.
+     * @return A new instance of fragment FragmentTakePicture.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentRetrieveLocation fragmentRetrieveLocation(String param1, String param2) {
-        FragmentRetrieveLocation fragment = new FragmentRetrieveLocation();
+    public static FragmentTakePicture fragmentTakePicture(String param1, String param2) {
+        FragmentTakePicture fragment = new FragmentTakePicture();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,22 +70,28 @@ public class FragmentRetrieveLocation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_retrieve_location, container, false);
+        return inflater.inflate(R.layout.fragment_fragment_take_picture, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //listener for found it button
-        Button foundItButton = view.findViewById(R.id.foundItButton);
-        foundItButton.setOnClickListener(new View.OnClickListener() {
+        Button takePicture = view.findViewById(R.id.takePicture);
+        takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentTakePicture_to_fragmentSavePicture);
             }
         });
 
+        Button cancel = view.findViewById(R.id.cancelButton);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_fragmentTakePicture_to_savedLocationFragment);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

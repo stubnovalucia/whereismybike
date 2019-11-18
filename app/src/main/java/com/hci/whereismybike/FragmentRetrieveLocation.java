@@ -1,4 +1,4 @@
-package com.example.whereismybike;
+package com.hci.whereismybike;
 
 import android.content.Context;
 import android.net.Uri;
@@ -14,16 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
 /**
- * FragmentMarkLocation class: Fragment that will have a map view and a button for saving location.
+ * FragmentRetrieveLocation class: Fragment that will have a map view and a button for saving location.
  *
  * @author Lucia Stubnova
  *
  * Lucia Stubnova: Main author
  *
  */
-public class FragmentMarkLocation extends Fragment {
+public class FragmentRetrieveLocation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,7 +34,7 @@ public class FragmentMarkLocation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentMarkLocation() {
+    public FragmentRetrieveLocation() {
         // Required empty public constructor
     }
 
@@ -45,11 +44,11 @@ public class FragmentMarkLocation extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentMarkLocation.
+     * @return A new instance of fragment FragmentRetrieveLocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentMarkLocation fragmentMarkLocation(String param1, String param2) {
-        FragmentMarkLocation fragment = new FragmentMarkLocation();
+    public static FragmentRetrieveLocation fragmentRetrieveLocation(String param1, String param2) {
+        FragmentRetrieveLocation fragment = new FragmentRetrieveLocation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,20 +69,22 @@ public class FragmentMarkLocation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mark_location, container, false);
+        return inflater.inflate(R.layout.fragment_fragment_retrieve_location, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button markLocationButton = view.findViewById(R.id.markLocationButton);
-        markLocationButton.setOnClickListener(new View.OnClickListener() {
+        //listener for found it button
+        Button foundItButton = view.findViewById(R.id.foundItButton);
+        foundItButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
+                Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
             }
         });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
