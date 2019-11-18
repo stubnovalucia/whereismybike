@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "563719171063",
+    "firebase_url": "https://whereismybike-cdb24.firebaseio.com",
+    "project_id": "whereismybike-cdb24",
+    "storage_bucket": "whereismybike-cdb24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563719171063:android:5019b0d879bfe44beb5cf2",
+        "android_client_info": {
+          "package_name": "com.hci.whereismybike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563719171063-2afr8atcs0g7p69bjcrsp2ue7gqbnert.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hci.whereismybike",
+            "certificate_hash": "a17cc2d2271e0ca0909d5bc8753ae101fdcaea56"
+          }
+        },
+        {
+          "client_id": "563719171063-iokdk9e972a0ki52eq5srio0gl184bj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hci.whereismybike",
+            "certificate_hash": "faf87e6112c70046ccad1b717d11ebdd6f2074c8"
+          }
+        },
+        {
+          "client_id": "563719171063-13de0pl14csv8oud0q6mrbbjlqpc72pn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoBqFaMEMS5oJDHpuNDzWdMYrm_Qct8SI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563719171063-13de0pl14csv8oud0q6mrbbjlqpc72pn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
