@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +54,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
 
     private OnFragmentInteractionListener mListener;
 
-    private FusedLocationProviderClient client;
+    FusedLocationProviderClient client;
     GoogleMap map;
     Location currentLocation;
     List<Address> addresses;
@@ -92,26 +91,18 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         }
 
         //Get current fused location
+        final OnMapReadyCallback mapCallBack = this;
         client = LocationServices.getFusedLocationProviderClient(getMainActivity());
-//        client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(Location location) {
-//                if(location != null) {
-//                    currentLocation = location;
-//                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-//                    getAddress(loc);
-//                }
-//            }
-//        });
-
-        Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+        client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null) {
+                if(location != null) {
                     currentLocation = location;
                     LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
                     getAddress(loc);
+
+                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(mapCallBack);
                 }
             }
         });
@@ -165,9 +156,6 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
             }
         });
 
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -197,6 +185,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
         LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
 
         marker = map.addMarker(new MarkerOptions()
