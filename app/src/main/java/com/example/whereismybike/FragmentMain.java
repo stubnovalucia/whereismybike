@@ -50,7 +50,7 @@ public class FragmentMain extends Fragment {
      * @return A new instance of fragment FragmentMain.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentMain newInstance(String param1, String param2) {
+    public static FragmentMain fragmentMain(String param1, String param2) {
         FragmentMain fragment = new FragmentMain();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);

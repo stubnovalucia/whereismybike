@@ -49,7 +49,7 @@ public class FragmentTakePicture extends Fragment {
      * @return A new instance of fragment FragmentTakePicture.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentTakePicture newInstance(String param1, String param2) {
+    public static FragmentTakePicture fragmentTakePicture(String param1, String param2) {
         FragmentTakePicture fragment = new FragmentTakePicture();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);

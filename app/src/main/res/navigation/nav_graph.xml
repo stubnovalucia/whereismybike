@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragmentMain">
+    app:startDestination="@id/fragmentSignIn">
 
     <fragment
         android:id="@+id/fragmentMain"
@@ -81,6 +81,15 @@
         tools:layout="@layout/fragment_fragment_retrieve_location" >
         <action
             android:id="@+id/action_fragmentRetrieveLocation_to_fragmentMain"
+            app:destination="@id/fragmentMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSignIn"
+        android:name="com.example.whereismybike.FragmentSignIn"
+        android:label="fragment_fragment_sign_in"
+        tools:layout="@layout/fragment_fragment_sign_in" >
+        <action
+            android:id="@+id/action_fragmentSignIn_to_fragmentMain"
             app:destination="@id/fragmentMain" />
     </fragment>
 </navigation>

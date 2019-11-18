@@ -48,7 +48,7 @@ public class FragmentSettings extends Fragment {
      * @return A new instance of fragment FragmentSettings.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSettings newInstance(String param1, String param2) {
+    public static FragmentSettings fragmentSettings(String param1, String param2) {
         FragmentSettings fragment = new FragmentSettings();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
