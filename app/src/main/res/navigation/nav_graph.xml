@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentSignIn"
-        android:name="com.example.whereismybike.FragmentSignIn"
+        android:name="com.hci.whereismybike.FragmentSignIn"
         android:label="fragment_fragment_sign_in"
         tools:layout="@layout/fragment_fragment_sign_in" >
         <action

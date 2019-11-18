@@ -17,10 +17,13 @@
 
     <Button
         android:id="@+id/foundItButton"
-        android:layout_width="430dp"
-        android:layout_height="95dp"
         android:text="@string/found_it_button"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="@color/blueGrey"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
