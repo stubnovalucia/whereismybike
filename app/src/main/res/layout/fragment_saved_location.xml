@@ -51,4 +51,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ImageView
+        android:id="@+id/bikePhotoView"
+        android:layout_width="173dp"
+        android:layout_height="143dp"
+        android:src="@android:color/background_light"
+        tools:layout_editor_absoluteX="119dp"
+        tools:layout_editor_absoluteY="402dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

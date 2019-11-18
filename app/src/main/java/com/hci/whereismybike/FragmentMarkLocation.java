@@ -43,7 +43,7 @@ import java.util.Locale;
  * Dominykas Rumsa: Integrated map view and its functionality
  *
  */
-public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
+public class FragmentMarkLocation extends Fragment /*implements OnMapReadyCallback*/ {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,7 +55,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
 
     private OnFragmentInteractionListener mListener;
 
-    private FusedLocationProviderClient client;
+    FusedLocationProviderClient client;
     GoogleMap map;
     Location currentLocation;
     List<Address> addresses;
@@ -92,7 +92,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         }
 
         //Get current fused location
-        client = LocationServices.getFusedLocationProviderClient(getMainActivity());
+//        client = LocationServices.getFusedLocationProviderClient(getMainActivity());
 //        client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
 //            @Override
 //            public void onSuccess(Location location) {
@@ -104,43 +104,46 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
 //            }
 //        });
 
-        Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                    getAddress(loc);
-                }
-            }
-        });
+//        Task<Location> task = client.getLastLocation();
+//        System.out.println("Task " + task);
+//        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                System.out.println("onsuccess " + location);
+//                if (location != null) {
+//                    currentLocation = location;
+//                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//                    System.out.println("Location " + currentLocation);
+//                    getAddress(loc);
+//                }
+//            }
+//        });
     }
 
     //Get address by decoding location
-    public String getAddress(LatLng loc){
-        try {
-            Geocoder geo = new Geocoder(getMainActivity(), Locale.getDefault());
-            addresses = geo.getFromLocation(loc.latitude, loc.longitude, 1);
-            if (addresses.isEmpty()) {
-                System.out.println("Waiting for Location");
-            }
-            else {
-                if (addresses.size() > 0) {
-                    String address = addresses.get(0).getThoroughfare() + " " + addresses.get(0).getFeatureName();
-                    if(address.contains("null") || address.contains("Unnamed")){
-                        return loc.latitude + "," + loc.longitude;
-                    }
-                    Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_LONG).show();
-                    return address;
-                }
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public String getAddress(LatLng loc){
+//        try {
+//            Geocoder geo = new Geocoder(getMainActivity(), Locale.getDefault());
+//            addresses = geo.getFromLocation(loc.latitude, loc.longitude, 1);
+//            if (addresses.isEmpty()) {
+//                System.out.println("Waiting for Location");
+//            }
+//            else {
+//                if (addresses.size() > 0) {
+//                    String address = addresses.get(0).getThoroughfare() + " " + addresses.get(0).getFeatureName();
+//                    if(address.contains("null") || address.contains("Unnamed")){
+//                        return loc.latitude + "," + loc.longitude;
+//                    }
+//                    Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_LONG).show();
+//                    return address;
+//                }
+//            }
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     private MainActivity getMainActivity (){
         return (MainActivity) getActivity();
@@ -166,8 +169,8 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         });
 
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -194,41 +197,41 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         mListener = null;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-
-        marker = map.addMarker(new MarkerOptions()
-                .position(markerPosition)
-                .title(getAddress(markerPosition)));
-        marker.setDraggable(true);
-
-        setCameraPosition(markerPosition);
-
-        // https://stackoverflow.com/a/23590087
-        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                marker.setTitle(getAddress(marker.getPosition()));
-                setCameraPosition(marker.getPosition());
-            }
-        });
-    }
-    private void setCameraPosition(LatLng position){
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(17).build();
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        map = googleMap;
+//        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//
+//        marker = map.addMarker(new MarkerOptions()
+//                .position(markerPosition)
+//                .title(getAddress(markerPosition)));
+//        marker.setDraggable(true);
+//
+//        setCameraPosition(markerPosition);
+//
+//        // https://stackoverflow.com/a/23590087
+//        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//            @Override
+//            public void onMarkerDragStart(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDrag(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDragEnd(Marker marker) {
+//                marker.setTitle(getAddress(marker.getPosition()));
+//                setCameraPosition(marker.getPosition());
+//            }
+//        });
+//    }
+//    private void setCameraPosition(LatLng position){
+//        CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(17).build();
+//        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -2,6 +2,8 @@ package com.hci.whereismybike;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,11 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -41,6 +47,8 @@ public class FragmentSavedLocation extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ImageView bikePhotoView;
 
     private OnFragmentInteractionListener mListener;
     OnDataPass saveBikeDataPasser;
@@ -106,6 +114,8 @@ public class FragmentSavedLocation extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
+
+        bikePhotoView = view.findViewById(R.id.bikePhotoView);
 
     }
 
@@ -203,11 +213,54 @@ public class FragmentSavedLocation extends Fragment {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "com.example.android.fileprovider",
+                        "com.hci.whereismybike.MainActivity",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
+        }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
+    }
+
+    private void setPic() {
+
+        // Get the dimensions of the View
+        int targetW = bikePhotoView.getWidth();
+        int targetH = bikePhotoView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        bikePhotoView.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("activityResult " );
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            System.out.println("success");
+            //setPic();
+            galleryAddPic();
         }
     }
 
