@@ -22,12 +22,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * FragmentRetrieveLocation class: Fragment that will have a map view and a button for saving location.
@@ -57,7 +64,10 @@ public class FragmentRetrieveLocation extends Fragment {
 
     //Firebase
     private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
     private FirebaseAuth auth;
+    private FirebaseUser user;
+    private String userID;
 
     public FragmentRetrieveLocation() {
         // Required empty public constructor
@@ -93,6 +103,14 @@ public class FragmentRetrieveLocation extends Fragment {
         //Firebase
         mStorageRef = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+
+        //get the signed in user
+        user = auth.getCurrentUser();
+        userID = user.getUid();
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+
+        GetData();
         GetPicture();
     }
 
@@ -164,20 +182,12 @@ public class FragmentRetrieveLocation extends Fragment {
             // Create an image file name
             String imageFileName = "bike";
             File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
+            image = File.createTempFile(imageFileName,"jpg",storageDir);
         } catch (IOException ie){
             ie.printStackTrace();
         }
 
         if (image != null){
-            //get the signed in user
-            FirebaseUser user = auth.getCurrentUser();
-            String userID = user.getUid();
-
             StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
             storageReference.getFile(image)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -194,5 +204,22 @@ public class FragmentRetrieveLocation extends Fragment {
                 }
             });
         }
+    }
+    public void GetData(){
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
+                Map<String, String> map = dataSnapshot.getValue(genericTypeIndicator);
+                String address = map.get("address");
+                String date = map.get("date");
+                String note = map.get("note");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

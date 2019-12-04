@@ -68,6 +68,8 @@ public class FragmentSavedLocation extends Fragment {
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private FirebaseAuth auth;
+    private FirebaseUser user;
+    private String userID;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -103,6 +105,10 @@ public class FragmentSavedLocation extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+
+        //get the signed in user
+        user = auth.getCurrentUser();
+        userID = user.getUid();
     }
 
     @Override
@@ -131,6 +137,7 @@ public class FragmentSavedLocation extends Fragment {
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
@@ -259,12 +266,6 @@ public class FragmentSavedLocation extends Fragment {
         }
     }
     private void uploadFile(Uri file){
-        System.out.println("Upload file:"+ file);
-
-        //get the signed in user
-        FirebaseUser user = auth.getCurrentUser();
-        String userID = user.getUid();
-
         StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
 
         storageReference.putFile(file)
@@ -280,5 +281,15 @@ public class FragmentSavedLocation extends Fragment {
                         System.out.println(exception.getMessage());
                     }
                 });
+    }
+
+    private void uploadDataToFirebase () {
+        //Firebase real time
+        mDatabaseRef.child("users").child(userID).child("address").setValue("test address");
+        mDatabaseRef.child("users").child(userID).child("date").setValue("20197987");
+        mDatabaseRef.child("users").child(userID).child("note").setValue("Test note 123");
+//        if(note != null){
+//            mDatabaseRef.child("users").child(userID).child("date").child("note").setValue("lol lol lol");
+//        }
     }
 }

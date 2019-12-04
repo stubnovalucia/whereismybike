@@ -9,9 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 
 /**
  * MainActivity class: activity that is opened when the app is launched.
@@ -48,10 +45,6 @@ public class MainActivity extends AppCompatActivity  implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             return;
         }
-        //Firebase real time message
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World again!");
 
         //Temporary code for conditional rendering
         sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
