@@ -22,8 +22,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +69,12 @@ public class FragmentSavedLocation extends Fragment {
 
     private SharedViewModel sharedViewModel;
 
+    //Firebase
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+
+    private FirebaseAuth auth;
+
     public FragmentSavedLocation() {
         // Required empty public constructor
     }
@@ -89,7 +105,10 @@ public class FragmentSavedLocation extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
+        //Firebase
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -230,6 +249,8 @@ public class FragmentSavedLocation extends Fragment {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         getActivity().sendBroadcast(mediaScanIntent);
+
+        uploadFile(contentUri);
     }
 
 
@@ -243,5 +264,27 @@ public class FragmentSavedLocation extends Fragment {
             galleryAddPic();
         }
     }
+    private void uploadFile(Uri file){
+        System.out.println("Upload file:"+ file);
 
+        //get the signed in user
+        FirebaseUser user = auth.getCurrentUser();
+        String userID = user.getUid();
+
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+
+        storageReference.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        System.out.println("FILE UPLOADED");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        System.out.println(exception.getMessage());
+                    }
+                });
+    }
 }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,7 +23,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.concurrent.Executor;
 
 /**
  * FragmentSignIn: Fragment for signing up
@@ -54,6 +64,8 @@ public class FragmentSignIn extends Fragment {
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 007;
     private static final String TAG = "Fragment Sign In";
+
+    private FirebaseAuth mAuth;
 
     public FragmentSignIn() {
         // Required empty public constructor
@@ -88,10 +100,13 @@ public class FragmentSignIn extends Fragment {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestEmail()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -133,6 +148,7 @@ public class FragmentSignIn extends Fragment {
 //        if (account != null) {
 //            Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
 //        }
+
         //updateUI(account);
     }
 
@@ -173,7 +189,7 @@ public class FragmentSignIn extends Fragment {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
+            firebaseAuthWithGoogle(account);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
             Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
@@ -183,6 +199,30 @@ public class FragmentSignIn extends Fragment {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             //updateUI(null);
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            //Snackbar.make((MainActivity) getActivity(), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                    }
+                });
     }
 
     @Override
