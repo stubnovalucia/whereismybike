@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -35,7 +36,8 @@ public class FragmentMain extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private Boolean savedBike = false;
+    private SharedViewModel sharedViewModel;
+    private Boolean savedBike;
 
     public FragmentMain() {
         // Required empty public constructor
@@ -66,6 +68,12 @@ public class FragmentMain extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+//        sharedViewModel.getSavedBike().observe(this, { savedBike ->
+//            this.savedBike = savedBike;
+//        });
     }
 
     @Override
@@ -81,8 +89,8 @@ public class FragmentMain extends Fragment {
 
         Button markLocationButton = view.findViewById(R.id.markLocationButton);
 
-        //To be done - conditional navigation - for now works just by setting the savedBike attribute
-        if (savedBike) {
+        //To be done - conditional navigation
+        if (sharedViewModel.getSavedBike().getValue()) {
             markLocationButton.setText(getResources().getString(R.string.show_it_button));
         } else {
             markLocationButton.setText(getResources().getString(R.string.mark_it_button));
@@ -101,7 +109,7 @@ public class FragmentMain extends Fragment {
         markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (savedBike) {
+                if (sharedViewModel.getSavedBike().getValue()) {
                     Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentRetrieveLocation);
                 } else {
                     Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_markLocationFragment);

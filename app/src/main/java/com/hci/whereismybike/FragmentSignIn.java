@@ -24,6 +24,15 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+/**
+ * FragmentSignIn: Fragment for signing up
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
+
 
 /**
  * A simple {@link Fragment} subclass.
