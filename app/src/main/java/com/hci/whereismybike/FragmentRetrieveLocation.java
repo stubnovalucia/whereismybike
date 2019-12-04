@@ -10,10 +10,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * FragmentRetrieveLocation class: Fragment that will have a map view and a button for saving location.
@@ -36,6 +50,14 @@ public class FragmentRetrieveLocation extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private SharedViewModel sharedViewModel;
+
+    //imageview displaying bike photo
+    private ImageView bikePhotoView;
+    private File image;
+
+    //Firebase
+    private StorageReference mStorageRef;
+    private FirebaseAuth auth;
 
     public FragmentRetrieveLocation() {
         // Required empty public constructor
@@ -67,6 +89,11 @@ public class FragmentRetrieveLocation extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+        //Firebase
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+        GetPicture();
     }
 
     @Override
@@ -90,6 +117,7 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         });
 
+        bikePhotoView = view.findViewById(R.id.bikePhotoView);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -129,5 +157,42 @@ public class FragmentRetrieveLocation extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void GetPicture () {
+        try {
+            // Create an image file name
+            String imageFileName = "bike";
+            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
+            );
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
+
+        if (image != null){
+            //get the signed in user
+            FirebaseUser user = auth.getCurrentUser();
+            String userID = user.getUid();
+
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+            storageReference.getFile(image)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("File succesfully downloaded");
+                            Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+                }
+            });
+        }
     }
 }
