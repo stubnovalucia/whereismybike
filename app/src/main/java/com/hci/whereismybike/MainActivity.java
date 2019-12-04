@@ -2,6 +2,7 @@ package com.hci.whereismybike;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -25,11 +26,11 @@ public class MainActivity extends AppCompatActivity  implements
         FragmentSavedLocation.OnFragmentInteractionListener,
         FragmentSavePicture.OnFragmentInteractionListener,
         FragmentSettings.OnFragmentInteractionListener,
-        FragmentTakePicture.OnFragmentInteractionListener,
         FragmentRetrieveLocation.OnFragmentInteractionListener,
         FragmentSignIn.OnFragmentInteractionListener,
         FragmentSavedLocation.OnDataPass {
 
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,11 @@ public class MainActivity extends AppCompatActivity  implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             return;
         }
+
+        //Temporary code for conditional rendering
+        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        sharedViewModel.setSavedBike(false);
+
     }
 
     //To be done

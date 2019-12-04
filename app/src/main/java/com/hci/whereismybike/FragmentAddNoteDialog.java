@@ -14,6 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * FragmentAddNoteDialog: FragmentAddNoteDialog for dialog for note taking
+ *
+ * @author Lucia Stubnova
+ *
+ * Lucia Stubnova: Main author
+ *
+ */
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +56,7 @@ public class FragmentAddNoteDialog extends DialogFragment {
      * @return A new instance of fragment FragmentAddNoteDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentAddNoteDialog newInstance(String param1, String param2) {
+    public static FragmentAddNoteDialog fragmentAddNoteDialog(String param1, String param2) {
         FragmentAddNoteDialog fragment = new FragmentAddNoteDialog();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);

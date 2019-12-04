@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ public class FragmentRetrieveLocation extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private SharedViewModel sharedViewModel;
 
     public FragmentRetrieveLocation() {
         // Required empty public constructor
@@ -63,6 +66,7 @@ public class FragmentRetrieveLocation extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -81,6 +85,7 @@ public class FragmentRetrieveLocation extends Fragment {
         foundItButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sharedViewModel.setSavedBike(false);
                 Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
             }
         });

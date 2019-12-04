@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.os.Environment;
@@ -20,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,10 +52,12 @@ public class FragmentSavedLocation extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    //imageview displaying bike photo
     private ImageView bikePhotoView;
 
     private OnFragmentInteractionListener mListener;
-    OnDataPass saveBikeDataPasser;
+
+    private SharedViewModel sharedViewModel;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -82,6 +88,8 @@ public class FragmentSavedLocation extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
     }
 
     @Override
@@ -110,7 +118,7 @@ public class FragmentSavedLocation extends Fragment {
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveBike(true);
+                sharedViewModel.setSavedBike(true);
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
@@ -131,7 +139,6 @@ public class FragmentSavedLocation extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            saveBikeDataPasser = (OnDataPass) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -164,10 +171,6 @@ public class FragmentSavedLocation extends Fragment {
      */
     public interface OnDataPass {
         void onSaveBike(Boolean savedBike);
-    }
-
-    public void saveBike(Boolean savedBike) {
-        saveBikeDataPasser.onSaveBike(savedBike);
     }
 
     //Camera feature
@@ -229,37 +232,14 @@ public class FragmentSavedLocation extends Fragment {
         getActivity().sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic() {
-
-        // Get the dimensions of the View
-        int targetW = bikePhotoView.getWidth();
-        int targetH = bikePhotoView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        bikePhotoView.setImageBitmap(bitmap);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("activityResult " );
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             System.out.println("success");
-            //setPic();
+            Glide.with(getActivity()).load(currentPhotoPath).into(bikePhotoView);
+            //Navigation.findNavController(getView()).navigate(R.id.action_savedLocationFragment_to_fragmentSavePicture);
             galleryAddPic();
         }
     }

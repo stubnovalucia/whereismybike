@@ -93,13 +93,13 @@ public class FragmentSavePicture extends Fragment {
             }
         });
 
-        Button retakeIt = view.findViewById(R.id.retakeItButton);
-        retakeIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_fragmentTakePicture2);
-            }
-        });
+//        Button retakeIt = view.findViewById(R.id.retakeItButton);
+//        retakeIt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Navigation.findNavController(view).navigate(R.id.action_fragmentSavePicture_to_fragmentTakePicture2);
+//            }
+//        });
 
         Button cancel = view.findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
