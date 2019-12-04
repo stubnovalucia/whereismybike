@@ -1,6 +1,7 @@
 package com.hci.whereismybike;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +30,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.hci.whereismybike.MainActivity;
 import com.hci.whereismybike.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,6 +71,13 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     Location currentLocation;
     List<Address> addresses;
     Marker marker;
+
+    FileOutputStream out;
+
+    private StorageReference mStorageRef;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private String userID;
 
     public FragmentMarkLocation() {
         // Required empty public constructor
@@ -92,19 +109,31 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+
+        //get the signed in user
+        user = auth.getCurrentUser();
+        userID = user.getUid();
+
         //Get current fused location
         final OnMapReadyCallback mapCallBack = this;
         client = LocationServices.getFusedLocationProviderClient(getMainActivity());
         client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+
+                //DELETE
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                mapFragment.getMapAsync(mapCallBack);
+
                 if(location != null) {
                     currentLocation = location;
                     LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
                     getAddress(loc);
 
-                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                    mapFragment.getMapAsync(mapCallBack);
+                    //SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                    //mapFragment.getMapAsync(mapCallBack);
                 }
             }
         });
@@ -154,6 +183,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                takeMapSnapshot();
                 Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
@@ -187,38 +217,76 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-
-        marker = map.addMarker(new MarkerOptions()
-                .position(markerPosition)
-                .title(getAddress(markerPosition)));
-        marker.setDraggable(true);
-
-        setCameraPosition(markerPosition);
-
-        // https://stackoverflow.com/a/23590087
-        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                marker.setTitle(getAddress(marker.getPosition()));
-                setCameraPosition(marker.getPosition());
-            }
-        });
+//        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//
+//        marker = map.addMarker(new MarkerOptions()
+//                .position(markerPosition)
+//                .title(getAddress(markerPosition)));
+//        marker.setDraggable(true);
+//
+//        setCameraPosition(markerPosition);
+//
+//        // https://stackoverflow.com/a/23590087
+//        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//            @Override
+//            public void onMarkerDragStart(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDrag(Marker marker) {
+//
+//            }
+//
+//            @Override
+//            public void onMarkerDragEnd(Marker marker) {
+//                marker.setTitle(getAddress(marker.getPosition()));
+//                setCameraPosition(marker.getPosition());
+//            }
+//        });
     }
     private void setCameraPosition(LatLng position){
         CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(17).build();
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    //https://stackoverflow.com/a/20118233
+    private void takeMapSnapshot(){
+        map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+            public void onSnapshotReady(Bitmap bitmap) {
+                try {
+                    // Write image to memory
+                    File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    File image = File.createTempFile(
+                            "map",  /* prefix */
+                            ".png",         /* suffix */
+                            storageDir      /* directory */
+                    );
+                    out = new FileOutputStream(image);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    uploadFile(image);
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+    }
+    private void uploadFile(File file){
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.png");
+        Uri contentUri = Uri.fromFile(file);
+        storageReference.putFile(contentUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        System.out.println("FILE UPLOADED");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        System.out.println(exception.getMessage());
+                    }
+                });
     }
 
     /**

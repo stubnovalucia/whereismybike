@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -71,6 +72,10 @@ public class FragmentSavedLocation extends Fragment {
     private FirebaseUser user;
     private String userID;
 
+    //imageview displaying bike photo
+    private ImageView mapView;
+    private File map;
+
     public FragmentSavedLocation() {
         // Required empty public constructor
     }
@@ -109,6 +114,8 @@ public class FragmentSavedLocation extends Fragment {
         //get the signed in user
         user = auth.getCurrentUser();
         userID = user.getUid();
+
+        GetMap();
     }
 
     @Override
@@ -143,7 +150,15 @@ public class FragmentSavedLocation extends Fragment {
             }
         });
 
+        mapView = view.findViewById(R.id.mapView);
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
+
+        // listener for map click
+        mapView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
     }
 
@@ -267,7 +282,6 @@ public class FragmentSavedLocation extends Fragment {
     }
     private void uploadFile(Uri file){
         StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
-
         storageReference.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -291,5 +305,33 @@ public class FragmentSavedLocation extends Fragment {
 //        if(note != null){
 //            mDatabaseRef.child("users").child(userID).child("date").child("note").setValue("lol lol lol");
 //        }
+    }
+    public void GetMap () {
+        try {
+            // Create an image file name
+            String imageFileName = "map";
+            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            map = File.createTempFile(imageFileName,"jpg",storageDir);
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
+
+        if (map != null){
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.png");
+            storageReference.getFile(map)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("File succesfully downloaded");
+                            Glide.with(getActivity()).load(Uri.fromFile(map)).into(mapView);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+                }
+            });
+        }
     }
 }
