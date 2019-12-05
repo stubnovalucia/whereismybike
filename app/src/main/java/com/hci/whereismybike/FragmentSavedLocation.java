@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -158,6 +160,17 @@ public class FragmentSavedLocation extends Fragment {
             }
         });
 
+        ImageButton deletePhotoButton = view.findViewById(R.id.deletePhoto);
+        deletePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Button takePictureBtn = view.findViewById(R.id.takePictureButton);
+                //takePictureBtn.setVisibility(View.VISIBLE);
+                CardView imageCard = getView().findViewById(R.id.imageCard);
+                imageCard.setVisibility(View.GONE);
+            }
+        });
+
         mapView = view.findViewById(R.id.mapView);
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
 
@@ -279,12 +292,17 @@ public class FragmentSavedLocation extends Fragment {
         uploadFile(contentUri);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("activityResult " );
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            System.out.println("success");
+
+            //hide take picture button and show the photo card
+            Button takePictureBtn = getView().findViewById(R.id.takePictureButton);
+            takePictureBtn .setVisibility(View.GONE);
+            CardView imageCard = getView().findViewById(R.id.imageCard);
+            imageCard.setVisibility(View.VISIBLE);
+
             Glide.with(getActivity()).load(currentPhotoPath).into(bikePhotoView);
             //Navigation.findNavController(getView()).navigate(R.id.action_savedLocationFragment_to_fragmentSavePicture);
             galleryAddPic();

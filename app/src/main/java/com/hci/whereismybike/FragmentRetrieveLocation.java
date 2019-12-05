@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -119,12 +120,25 @@ public class FragmentRetrieveLocation extends Fragment {
         });
 
         //listener for found it button
-        Button getDirectionsButton = view.findViewById(R.id.getDirectionsButton);
+        FloatingActionButton getDirectionsButton = view.findViewById(R.id.getDirectionsButton);
         getDirectionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Uri.Builder builder = new Uri.Builder();
+//                builder.scheme("https")
+//                        .authority("www.google.com")
+//                        .appendPath("maps")
+//                        .appendPath("dir")
+//                        .appendPath("")
+//                        .appendQueryParameter("api", "1")
+//                        .appendQueryParameter("destination", 80.00023 + "," + 13.0783);
+//                String url = builder.build().toString();
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+
                 //Launches Google Maps navigation
-                Uri gmmIntentUri = Uri.parse("google.navigation:w=Dokk1,+Aarhus"); //location
+                Uri gmmIntentUri = Uri.parse("google.navigation:w=56.1536274,10.2118649"); //location
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
