@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -134,6 +135,14 @@ public class FragmentSavedLocation extends Fragment {
             public void onClick(View view) {
                 uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
+                // find the CoordinatorLayout id
+                View contextView = view.findViewById(android.R.id.content);
+                // Make and display Snackbar
+                Snackbar snackbar = Snackbar.make(view, "Location saved", Snackbar.LENGTH_SHORT);
+                // Set action with Retry Listener
+                //snackbar.setAction("Undo"/*, new TryAgainListener()*/);
+                // show the Snackbar
+                snackbar.show();
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
