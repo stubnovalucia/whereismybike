@@ -37,7 +37,8 @@
     <string name="save_location_button">Save it</string>
     <string name="title_activity_maps">Map</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    //Sign in Fragment
+    <string name="sign_in_options">Sign in using one the options below:</string>
+
 
 </resources>
