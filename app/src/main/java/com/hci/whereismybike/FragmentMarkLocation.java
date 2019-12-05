@@ -122,19 +122,14 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+            if(location != null) {
+                currentLocation = location;
+                LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                getAddress(loc);
 
-                //DELETE
                 SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                 mapFragment.getMapAsync(mapCallBack);
-
-                if(location != null) {
-                    currentLocation = location;
-                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                    getAddress(loc);
-
-                    //SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                    //mapFragment.getMapAsync(mapCallBack);
-                }
+            }
             }
         });
     }
@@ -217,33 +212,33 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-//        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-//
-//        marker = map.addMarker(new MarkerOptions()
-//                .position(markerPosition)
-//                .title(getAddress(markerPosition)));
-//        marker.setDraggable(true);
-//
-//        setCameraPosition(markerPosition);
-//
-//        // https://stackoverflow.com/a/23590087
-//        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-//            @Override
-//            public void onMarkerDragStart(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDrag(Marker marker) {
-//
-//            }
-//
-//            @Override
-//            public void onMarkerDragEnd(Marker marker) {
-//                marker.setTitle(getAddress(marker.getPosition()));
-//                setCameraPosition(marker.getPosition());
-//            }
-//        });
+        LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+
+        marker = map.addMarker(new MarkerOptions()
+                .position(markerPosition)
+                .title(getAddress(markerPosition)));
+        marker.setDraggable(true);
+
+        setCameraPosition(markerPosition);
+
+        // https://stackoverflow.com/a/23590087
+        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                marker.setTitle(getAddress(marker.getPosition()));
+                setCameraPosition(marker.getPosition());
+            }
+        });
     }
     private void setCameraPosition(LatLng position){
         CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(17).build();

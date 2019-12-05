@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7F7F7"
     tools:context=".FragmentMarkLocation">
 
     <!-- TODO: Update blank fragment layout -->
@@ -29,11 +30,16 @@
 
     <Button
         android:id="@+id/markLocationButton"
-        android:text="@string/mark_it_button"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@color/blueGrey"
-        android:textColor="@color/white"
+        android:drawableEnd="@drawable/pin"
+        android:paddingRight="100dp"
+        android:paddingLeft="100dp"
+        android:text="@string/mark_it_button"
+        android:textColor="#F7F7F7"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

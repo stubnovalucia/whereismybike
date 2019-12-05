@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7F7F7"
     tools:context=".FragmentSavedLocation">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,8 +14,8 @@
         android:layout_width="0dp"
         android:layout_height="110dp"
         android:layout_marginBottom="32dp"
-        android:src="@android:color/background_light"
         android:scaleType="centerCrop"
+        android:src="@android:color/background_light"
         app:layout_constraintBottom_toTopOf="@+id/addNoteButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,16 +31,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <ScrollView-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
+    <!--    <ScrollView-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent">-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--            android:layout_width="fill_parent"-->
-<!--            android:layout_height="fill_parent">-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--            android:layout_width="fill_parent"-->
+    <!--            android:layout_height="fill_parent">-->
 
     <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--    </ScrollView>-->
+    <!--    </ScrollView>-->
 
     <Button
         android:id="@+id/addNoteButton"
@@ -85,8 +86,13 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@color/blueGrey"
-        android:text="@string/save_location_button"
-        android:textColor="@color/white"
+        android:drawableEnd="@drawable/pin"
+        android:paddingRight="105dp"
+        android:paddingLeft="105dp"
+        android:text="Save it"
+        android:textColor="#F7F7F7"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

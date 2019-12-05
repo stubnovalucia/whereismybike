@@ -4,17 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7F7F7"
     tools:context=".FragmentMain">
 
     <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/mainFragment"
-        android:layout_width="413dp"
-        android:layout_height="732dp"
-        android:text="@string/main_fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -29,23 +22,30 @@
 
     <Button
         android:id="@+id/markLocationButton"
-        android:text="@string/mark_it_button"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@color/blueGrey"
-        android:textColor="@color/white"
+        android:drawableEnd="@drawable/pin"
+        android:paddingRight="100dp"
+        android:paddingLeft="100dp"
+        android:text="@string/mark_it_button"
+        android:textColor="#F7F7F7"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/whereIsMyBike"
-        android:layout_width="200dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="95dp"
-        android:layout_marginTop="235dp"
-        android:text="@string/where_is_my_bike"
+        android:layout_width="0dp"
+        android:layout_height="397dp"
+        android:src="@drawable/whereismybike"
+        app:layout_constraintBottom_toTopOf="@+id/markLocationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.299" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
