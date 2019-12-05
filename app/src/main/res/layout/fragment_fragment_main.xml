@@ -30,7 +30,7 @@
         android:paddingLeft="100dp"
         android:text="@string/mark_it_button"
         android:textColor="#F7F7F7"
-        android:textSize="40sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
