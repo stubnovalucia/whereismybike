@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -136,13 +137,23 @@ public class FragmentSavedLocation extends Fragment {
                 uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
                 // find the CoordinatorLayout id
-                View contextView = view.findViewById(android.R.id.content);
                 // Make and display Snackbar
-                Snackbar snackbar = Snackbar.make(view, "Location saved", Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(view, "Location saved",
+                                Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //TODO
+                            }
+                        });
+                snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.lightGreen));
+                snackbar.show();
                 // Set action with Retry Listener
                 //snackbar.setAction("Undo"/*, new TryAgainListener()*/);
                 // show the Snackbar
-                snackbar.show();
+                //snackbar.show();
                 Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
