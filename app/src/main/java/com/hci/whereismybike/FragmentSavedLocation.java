@@ -158,6 +158,7 @@ public class FragmentSavedLocation extends Fragment {
         });
 
         EditText address = view.findViewById(R.id.address);
+        System.out.println(sharedViewModel.getAddress());
         address.setText(sharedViewModel.getAddress());
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, MMM d", Locale.getDefault());
