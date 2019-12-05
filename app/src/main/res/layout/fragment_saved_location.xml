@@ -68,8 +68,8 @@
                             android:gravity="center|start"
                             android:paddingStart="10dp"
                             android:paddingEnd="0dp"
-                            android:text="@string/information"
                             android:textColor="@color/white"
+                            android:text="@string/information"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                     </FrameLayout>
@@ -250,7 +250,7 @@
         android:drawableEnd="@drawable/pin"
         android:paddingRight="105dp"
         android:paddingLeft="105dp"
-        android:text="Save it"
+        android:text="@string/save_location_button"
         android:textColor="#F7F7F7"
         android:textSize="30sp"
         android:textStyle="bold"

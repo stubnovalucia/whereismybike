@@ -16,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +38,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -55,11 +60,13 @@ public class FragmentRetrieveLocation extends Fragment {
     private ImageView bikePhotoView;
     private File image;
 
+    //imageview displaying map
+    private ImageView mapView;
+    private File map;
+
     //Firebase
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
-    private FirebaseAuth auth;
-    private FirebaseUser user;
     private String userID;
 
     public FragmentRetrieveLocation() {
@@ -86,15 +93,18 @@ public class FragmentRetrieveLocation extends Fragment {
 
         //Firebase
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
         //get the signed in user
-        user = auth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
-        GetData();
+        if(sharedViewModel.getAddress().equals("")){
+            GetData();
+        }
+
         GetPicture();
     }
 
@@ -148,6 +158,21 @@ public class FragmentRetrieveLocation extends Fragment {
         });
 
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
+
+        EditText address = view.findViewById(R.id.address);
+        address.setText(sharedViewModel.getAddress());
+
+        TextView date = view.findViewById(R.id.date);
+        date.setText(sharedViewModel.getDateandtime());
+
+        mapView = view.findViewById(R.id.mapView);
+        try {
+            Glide.with(getContext()).load(Uri.fromFile(sharedViewModel.getMap())).into(mapView);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            // Get it from firebase storage
+            GetMap();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -190,23 +215,73 @@ public class FragmentRetrieveLocation extends Fragment {
     }
 
     public void GetPicture () {
+        try{
+            Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            try {
+                // Create an image file name
+                String imageFileName = "bike";
+                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                image = File.createTempFile(imageFileName,"jpg",storageDir);
+            } catch (IOException ie){
+                ie.printStackTrace();
+            }
+
+            if (image != null){
+                StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+                storageReference.getFile(image)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                System.out.println("File succesfully downloaded");
+                                Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle failed download
+                        // ...
+                    }
+                });
+            }
+        }
+    }
+    public void GetData(){
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
+                Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
+                sharedViewModel.setAddress(dataMap.get("address"));
+                sharedViewModel.setDateandtime(dataMap.get("date"));
+                sharedViewModel.setNote(dataMap.get("note"));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void GetMap () {
         try {
             // Create an image file name
-            String imageFileName = "bike";
+            String imageFileName = "map";
             File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            image = File.createTempFile(imageFileName,"jpg",storageDir);
+            map = File.createTempFile(imageFileName,"jpg",storageDir);
         } catch (IOException ie){
             ie.printStackTrace();
         }
 
-        if (image != null){
-            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
-            storageReference.getFile(image)
+        if (map != null){
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+            storageReference.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             System.out.println("File succesfully downloaded");
-                            Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                            Glide.with(getActivity()).load(Uri.fromFile(map)).into(mapView);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -216,22 +291,5 @@ public class FragmentRetrieveLocation extends Fragment {
                 }
             });
         }
-    }
-    public void GetData(){
-        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                Map<String, String> map = dataSnapshot.getValue(genericTypeIndicator);
-                String address = map.get("address");
-                String date = map.get("date");
-                String note = map.get("note");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
 /**
  * FragmentMain class: Initial application element that will be shown at start up.
  *

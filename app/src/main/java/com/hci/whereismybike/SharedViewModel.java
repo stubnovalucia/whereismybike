@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+
 /**
  * SharedViewModel: SharedViewModel for sharing data bewteen fragments
  *
@@ -21,6 +23,8 @@ public class SharedViewModel extends ViewModel {
     private String address;
     private String dateandtime;
     private String note;
+    private File map;
+    private File bikePicture;
 
     public void setSavedBike(Boolean saved) {savedBike.setValue(saved);}
 
@@ -57,4 +61,21 @@ public class SharedViewModel extends ViewModel {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public File getMap() {
+        return map;
+    }
+
+    public void setMap(File map) {
+        this.map = map;
+    }
+
+    public File getBikePicture() {
+        return bikePicture;
+    }
+
+    public void setBikePicture(File bikePicture) {
+        this.bikePicture = bikePicture;
+    }
 }
+

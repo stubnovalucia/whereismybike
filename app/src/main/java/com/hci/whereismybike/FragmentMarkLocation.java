@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.os.Environment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ import java.util.Locale;
  * Dominykas Rumsa: Integrated map view and its functionality
  *
  */
-public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
+public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback{
     private OnFragmentInteractionListener mListener;
     private GoogleMap map;
     private Location currentLocation;
@@ -101,16 +102,16 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-            if(location != null) {
-                currentLocation = location;
-                LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                //Store data
-                sharedViewModel.setLatLng(loc);
-                sharedViewModel.setAddress(getAddress(loc));
+                if(location != null) {
+                    currentLocation = location;
+                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                    //Store data
+                    sharedViewModel.setLatLng(loc);
+                    sharedViewModel.setAddress(getAddress(loc));
 
-                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                mapFragment.getMapAsync(mapCallBack);
-            }
+                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                    mapFragment.getMapAsync(mapCallBack);
+                }
             }
         });
     }
@@ -129,8 +130,8 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                     if(address.contains("null") || address.contains("Unnamed")){
                         return loc.latitude + "," + loc.longitude;
                     }
-                    Toast toast = Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_LONG);
-                    toast.setMargin(0,85);
+                    Toast toast = Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM,0,250);
                     toast.show();
                     return address;
                 }
@@ -161,17 +162,9 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takeMapSnapshot();
-                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
+                takeMapSnapshot(view);
             }
         });
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -230,19 +223,23 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     }
 
     //https://stackoverflow.com/a/20118233
-    private void takeMapSnapshot(){
+    private void takeMapSnapshot(final View view){
         map.snapshot(new GoogleMap.SnapshotReadyCallback() {
             public void onSnapshotReady(Bitmap bitmap) {
                 try {
                     // Write image to memory
+                    System.out.println("Creating file");
                     File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                     File image = File.createTempFile(
                             "map",  /* prefix */
-                            ".png",         /* suffix */
+                            ".jpeg",         /* suffix */
                             storageDir      /* directory */
                     );
+                    System.out.println("file created");
                     out = new FileOutputStream(image);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    sharedViewModel.setMap(image);
+                    Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
                     uploadFile(image);
                 }catch (Exception e){
                     System.out.println(e.getMessage());
@@ -251,7 +248,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         });
     }
     private void uploadFile(File file){
-        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.png");
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
         Uri contentUri = Uri.fromFile(file);
         storageReference.putFile(contentUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

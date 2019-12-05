@@ -59,23 +59,19 @@ public class FragmentSavedLocation extends Fragment {
 
     //imageview displaying bike photo
     private ImageView bikePhotoView;
-
     private OnFragmentInteractionListener mListener;
-
     private SharedViewModel sharedViewModel;
 
     //Firebase
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
-    private FirebaseAuth auth;
-    private FirebaseUser user;
     private String userID;
 
-    //imageview displaying bike photo
+    //imageview displaying map
     private ImageView mapView;
     private File map;
 
-    String currentPhotoPath;
+    private String currentPhotoPath;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -101,13 +97,11 @@ public class FragmentSavedLocation extends Fragment {
         //Firebase
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
 
         //get the signed in user
-        user = auth.getCurrentUser();
         userID = user.getUid();
-
-        GetMap();
     }
 
     @Override
@@ -126,7 +120,6 @@ public class FragmentSavedLocation extends Fragment {
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentTakePicture);
                 dispatchTakePictureIntent();
             }
         });
@@ -182,7 +175,6 @@ public class FragmentSavedLocation extends Fragment {
         });
 
         EditText address = view.findViewById(R.id.address);
-        System.out.println(sharedViewModel.getAddress());
         address.setText(sharedViewModel.getAddress());
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, MMM d", Locale.getDefault());
@@ -191,6 +183,14 @@ public class FragmentSavedLocation extends Fragment {
         TextView date = view.findViewById(R.id.date);
         date.setText(currentDateandTime);
 
+        // Get image of map from local storage
+        try {
+            Glide.with(getContext()).load(Uri.fromFile(sharedViewModel.getMap())).into(mapView);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            // Get it from firebase storage
+            GetMap();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -251,6 +251,7 @@ public class FragmentSavedLocation extends Fragment {
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
+        sharedViewModel.setBikePicture(image);
         return image;
     }
 
@@ -304,7 +305,6 @@ public class FragmentSavedLocation extends Fragment {
             imageCard.setVisibility(View.VISIBLE);
 
             Glide.with(getActivity()).load(currentPhotoPath).into(bikePhotoView);
-            //Navigation.findNavController(getView()).navigate(R.id.action_savedLocationFragment_to_fragmentSavePicture);
             galleryAddPic();
         }
     }
@@ -345,7 +345,7 @@ public class FragmentSavedLocation extends Fragment {
         }
 
         if (map != null){
-            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.png");
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
             storageReference.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
