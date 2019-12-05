@@ -55,23 +55,13 @@ import java.util.Locale;
  *
  */
 public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
     FusedLocationProviderClient client;
     GoogleMap map;
     Location currentLocation;
     List<Address> addresses;
     Marker marker;
-
     FileOutputStream out;
 
     private StorageReference mStorageRef;
@@ -87,16 +77,11 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentMarkLocation.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentMarkLocation fragmentMarkLocation(String param1, String param2) {
+    public static FragmentMarkLocation fragmentMarkLocation() {
         FragmentMarkLocation fragment = new FragmentMarkLocation();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,10 +89,6 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
