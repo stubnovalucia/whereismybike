@@ -8,14 +8,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/mainFragment"
-        android:layout_width="413dp"
-        android:layout_height="732dp"
-        android:text="@string/main_fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/settingsButton"
         android:layout_width="90dp"

@@ -103,14 +103,6 @@ public class FragmentSignIn extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button mainfragbtn = view.findViewById(R.id.mainfragbtn);
-        mainfragbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
-            }
-        });
-
         SignInButton googleSignInButton = view.findViewById(R.id.googleSignInButton);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity  implements
         FragmentMarkLocation.OnFragmentInteractionListener,
         FragmentMain.OnFragmentInteractionListener,
         FragmentSavedLocation.OnFragmentInteractionListener,
-        FragmentSavePicture.OnFragmentInteractionListener,
         FragmentSettings.OnFragmentInteractionListener,
         FragmentRetrieveLocation.OnFragmentInteractionListener,
         FragmentSignIn.OnFragmentInteractionListener {

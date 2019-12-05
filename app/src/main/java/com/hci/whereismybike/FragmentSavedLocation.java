@@ -67,7 +67,7 @@ public class FragmentSavedLocation extends Fragment {
     //imageview displaying bike photo
     private ImageView mapView;
     private File map;
-    
+
     String currentPhotoPath;
 
     public FragmentSavedLocation() {
