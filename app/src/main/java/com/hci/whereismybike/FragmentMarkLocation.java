@@ -118,7 +118,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     //Get address by decoding location
     public String getAddress(LatLng loc){
         try {
-            Geocoder geo = new Geocoder(getMainActivity(), Locale.getDefault());
+            Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
             List<Address> addresses = geo.getFromLocation(loc.latitude, loc.longitude, 1);
             if (addresses.isEmpty()) {
                 System.out.println("Waiting for Location");
@@ -129,7 +129,9 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                     if(address.contains("null") || address.contains("Unnamed")){
                         return loc.latitude + "," + loc.longitude;
                     }
-                    Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_LONG);
+                    toast.setMargin(0,85);
+                    toast.show();
                     return address;
                 }
             }
