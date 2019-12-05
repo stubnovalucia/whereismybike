@@ -51,14 +51,6 @@ import java.util.concurrent.Executor;
  * to handle interaction events.
  */
 public class FragmentSignIn extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private GoogleSignInClient mGoogleSignInClient;
@@ -75,16 +67,11 @@ public class FragmentSignIn extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentSignIn.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentSignIn fragmentSignIn(String param1, String param2) {
+    public static FragmentSignIn fragmentSignIn() {
         FragmentSignIn fragment = new FragmentSignIn();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,10 +79,6 @@ public class FragmentSignIn extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -119,14 +102,6 @@ public class FragmentSignIn extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Button mainfragbtn = view.findViewById(R.id.mainfragbtn);
-        mainfragbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
-            }
-        });
 
         SignInButton googleSignInButton = view.findViewById(R.id.googleSignInButton);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {

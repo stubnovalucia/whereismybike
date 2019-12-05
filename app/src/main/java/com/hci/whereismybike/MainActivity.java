@@ -24,11 +24,9 @@ public class MainActivity extends AppCompatActivity  implements
         FragmentMarkLocation.OnFragmentInteractionListener,
         FragmentMain.OnFragmentInteractionListener,
         FragmentSavedLocation.OnFragmentInteractionListener,
-        FragmentSavePicture.OnFragmentInteractionListener,
         FragmentSettings.OnFragmentInteractionListener,
         FragmentRetrieveLocation.OnFragmentInteractionListener,
-        FragmentSignIn.OnFragmentInteractionListener,
-        FragmentSavedLocation.OnDataPass {
+        FragmentSignIn.OnFragmentInteractionListener {
 
     private SharedViewModel sharedViewModel;
 
@@ -58,17 +56,6 @@ public class MainActivity extends AppCompatActivity  implements
 
     }
 
-
-    @Override
-    public void onSaveBike(Boolean savedBike) {
-        //To be done - data passing from fragment to activity
-//        this.savedBike = savedBike;
-//        bundle.putBoolean("savedbike", savedBike);
-//        Bundle bundle = new Bundle();
-//        bundle.putBoolean("savedBike", savedBike);
-//        FragmentMain fragmentMain = new FragmentMain();
-//        fragmentMain.setArguments(bundle);
-    }
 }
 
 
