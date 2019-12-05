@@ -1,6 +1,7 @@
 package com.hci.whereismybike;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * FragmentMain class: Initial application element that will be shown at start up.
@@ -71,9 +73,9 @@ public class FragmentMain extends Fragment {
             markLocationButton.setText(getResources().getString(R.string.mark_it_button));
         }
 
-        //listener for settings button
-        Button settingsButton = view.findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        //listener for settings icon
+        ImageView settingsCog = view.findViewById(R.id.settingsCog);
+        settingsCog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_fragmentMain_to_fragmentSettings);

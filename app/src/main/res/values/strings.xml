@@ -3,23 +3,13 @@
 
     //Main Fragment
     <string name="main_fragment">Main Fragment</string>
-    <string name="settings_button">Settings</string>
     <string name="where_is_my_bike">Where is my bike</string>
     <string name="mark_it_button">Mark it</string>
     <string name="show_it_button">Show it</string>
 
-    //Save Picture Fragment
-    <string name="save_picture_fragment">Save Picture Fragment</string>
-    <string name="save_button">Save</string>
-    <string name="retake_it_button">Retake it</string>
-
     //Settings Fragment
     <string name="settings_fragment">Settings Fragment</string>
     <string name="settings">Settings</string>
-
-    //Take Picture Fragment
-    <string name="take_picture_fragment">Take Picture Fragment</string>
-    <string name="flash">Flash</string>
 
     //Mark Location Fragment
     <string name="mark_location_fragment">Mark Location Fragment</string>
@@ -31,7 +21,7 @@
 
     //Saved Location Fragment
     <string name="saved_location_fragment">Saved Location Fragment</string>
-    <string name="information">Information</string>
+    <string name="location">Location</string>
     <string name="picture">Picture</string>
     <string name="note">Note</string>
     <string name="take_picture_button">Take a picture</string>
@@ -40,7 +30,11 @@
     <string name="title_activity_maps">Map</string>
 
     //Sign in Fragment
-    <string name="sign_in_options">Sign in using one the options below:</string>
+    <string name="sign_in_options">Sign in using one of the options below:</string>
+
+    //Settings
+    <string name="notifications">Allow notifications</string>
+    <string name="signout">Sign out</string>
 
 
 </resources>

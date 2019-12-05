@@ -8,31 +8,26 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.concurrent.Executor;
 
 /**
  * FragmentSignIn: Fragment for signing up
@@ -40,6 +35,7 @@ import java.util.concurrent.Executor;
  * @author Lucia Stubnova
  *
  * Lucia Stubnova: Main author
+ * Dominykas Rumsa: mooved GoogleSigninClient to sharedViewModel
  *
  */
 
@@ -53,9 +49,10 @@ import java.util.concurrent.Executor;
 public class FragmentSignIn extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 007;
     private static final String TAG = "Fragment Sign In";
+
+    private SharedViewModel sharedViewModel;
 
     private FirebaseAuth mAuth;
 
@@ -79,7 +76,7 @@ public class FragmentSignIn extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -87,7 +84,7 @@ public class FragmentSignIn extends Fragment {
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        sharedViewModel.setmGoogleSignInClient(GoogleSignIn.getClient(getActivity(), gso));
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -144,7 +141,7 @@ public class FragmentSignIn extends Fragment {
 //    }
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = sharedViewModel.getmGoogleSignInClient().getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 

@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_fragmentSettings_to_fragmentMain"
             app:destination="@id/fragmentMain" />
+        <action
+            android:id="@+id/action_fragmentSettings_to_fragmentSignIn"
+            app:destination="@id/fragmentSignIn" />
     </fragment>
     <fragment
         android:id="@+id/markLocationFragment"
@@ -46,18 +49,6 @@
         <action
             android:id="@+id/action_savedLocationFragment_to_fragmentMain"
             app:destination="@id/fragmentMain" />
-        <action
-            android:id="@+id/action_savedLocationFragment_to_fragmentSavePicture"
-            app:destination="@id/fragmentSavePicture" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentSavePicture"
-        android:name="com.hci.whereismybike.FragmentSavePicture"
-        android:label="fragment_fragment_save_picture"
-        tools:layout="@layout/fragment_fragment_save_picture" >
-        <action
-            android:id="@+id/action_fragmentSavePicture_to_savedLocationFragment"
-            app:destination="@id/savedLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragmentRetrieveLocation"

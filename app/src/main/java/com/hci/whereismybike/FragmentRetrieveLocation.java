@@ -38,9 +38,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -134,26 +131,26 @@ public class FragmentRetrieveLocation extends Fragment {
         getDirectionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Uri.Builder builder = new Uri.Builder();
-//                builder.scheme("https")
-//                        .authority("www.google.com")
-//                        .appendPath("maps")
-//                        .appendPath("dir")
-//                        .appendPath("")
-//                        .appendQueryParameter("api", "1")
-//                        .appendQueryParameter("destination", 80.00023 + "," + 13.0783);
-//                String url = builder.build().toString();
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("https")
+                    .authority("www.google.com")
+                    .appendPath("maps")
+                    .appendPath("dir")
+                    .appendPath("")
+                    .appendQueryParameter("api", "1")
+                    .appendQueryParameter("destination", sharedViewModel.getLatLng().latitude + "," + sharedViewModel.getLatLng().longitude);
+            String url = builder.build().toString();
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
 
-                //Launches Google Maps navigation
-                Uri gmmIntentUri = Uri.parse("google.navigation:w=56.1536274,10.2118649"); //location
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                }
+//            //Launches Google Maps navigation
+//            Uri gmmIntentUri = Uri.parse("google.navigation:w=56.1536274,10.2118649"); //location
+//            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//            mapIntent.setPackage("com.google.android.apps.maps");
+//            if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                startActivity(mapIntent);
+//            }
             }
         });
 

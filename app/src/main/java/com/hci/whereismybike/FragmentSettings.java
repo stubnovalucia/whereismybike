@@ -7,12 +7,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 
 /**
@@ -22,40 +27,21 @@ import android.widget.Button;
  *
  * Lucia Stubnova: Main author
  *
+ * Dominykas Rumsa: implemented sign out functionality
  */
 public class FragmentSettings extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+
+    private SharedViewModel sharedViewModel;
 
     public FragmentSettings() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment FragmentSettings.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentSettings fragmentSettings() {
-        FragmentSettings fragment = new FragmentSettings();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -69,14 +55,26 @@ public class FragmentSettings extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button closeSettingsButton = view.findViewById(R.id.closeSettingsButton);
-        closeSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_fragmentSettings_to_fragmentMain);
+        ImageView closeSettings = view.findViewById(R.id.closeSettings);
+        closeSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_fragmentSettings_to_fragmentMain);
             }
         });
 
+        Button signOut = view.findViewById(R.id.signOut);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                sharedViewModel.getmGoogleSignInClient().signOut()
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Navigation.findNavController(view).navigate(R.id.action_fragmentSettings_to_fragmentSignIn);
+                        }
+                    });
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

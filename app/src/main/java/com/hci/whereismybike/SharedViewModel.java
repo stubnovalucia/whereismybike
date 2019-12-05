@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
@@ -15,16 +16,26 @@ import java.io.File;
  *
  * Lucia Stubnova: Main author
  *
+ * Dominykas Rumsa: added parameters for storing and retrieving data
  */
 
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<Boolean> savedBike = new MutableLiveData<Boolean>();
+    private GoogleSignInClient mGoogleSignInClient;
     private LatLng latLng;
     private String address;
     private String dateandtime;
     private String note;
     private File map;
     private File bikePicture;
+
+    public GoogleSignInClient getmGoogleSignInClient() {
+        return mGoogleSignInClient;
+    }
+
+    public void setmGoogleSignInClient(GoogleSignInClient mGoogleSignInClient) {
+        this.mGoogleSignInClient = mGoogleSignInClient;
+    }
 
     public void setSavedBike(Boolean saved) {savedBike.setValue(saved);}
 
