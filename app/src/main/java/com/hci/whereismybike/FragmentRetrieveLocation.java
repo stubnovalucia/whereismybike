@@ -1,6 +1,7 @@
 package com.hci.whereismybike;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -114,6 +115,21 @@ public class FragmentRetrieveLocation extends Fragment {
             public void onClick(View view) {
                 sharedViewModel.setSavedBike(false);
                 Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
+            }
+        });
+
+        //listener for found it button
+        Button getDirectionsButton = view.findViewById(R.id.getDirectionsButton);
+        getDirectionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Launches Google Maps navigation
+                Uri gmmIntentUri = Uri.parse("google.navigation:w=Dokk1,+Aarhus"); //location
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
             }
         });
 
