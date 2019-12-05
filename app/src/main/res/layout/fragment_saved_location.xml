@@ -46,10 +46,10 @@
         android:id="@+id/addNoteButton"
         android:layout_width="129dp"
         android:layout_height="45dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="268dp"
         android:background="@color/lightGreen"
         android:text="@string/add_note_button"
-        android:textColor="@color/white"
+        android:textColor="@color/offwhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -58,10 +58,10 @@
         android:id="@+id/takePictureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="340dp"
         android:background="@color/lightGreen"
         android:text="@string/take_picture_button"
-        android:textColor="@color/white"
+        android:textColor="@color/offwhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,8 +78,10 @@
         android:src="@android:color/background_light"
         app:layout_constraintBottom_toTopOf="@+id/saveLocationButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/takePictureButton" />
+        app:layout_constraintTop_toBottomOf="@+id/takePictureButton"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/saveLocationButton"
@@ -96,6 +98,72 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="340dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toTopOf="@+id/addNoteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerPadding="10dp"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="340dp"
+                android:layout_height="40dp">
+
+                <View
+                    android:id="@+id/headerBar"
+                    android:layout_width="340dp"
+                    android:layout_height="40dp"
+                    android:background="@color/lightGreen" />
+
+                <TextView
+                    android:id="@+id/information"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center|start"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:text="@string/information"
+                    android:textColor="@color/offwhite"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:ems="10"
+                android:fontFamily="@font/roboto"
+                android:gravity="center|center_horizontal"
+                android:inputType="textPersonName"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

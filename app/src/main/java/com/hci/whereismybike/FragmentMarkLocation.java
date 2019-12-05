@@ -163,7 +163,6 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                 Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event

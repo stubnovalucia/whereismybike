@@ -31,6 +31,7 @@
 
     //Saved Location Fragment
     <string name="saved_location_fragment">Saved Location Fragment</string>
+    <string name="information">Information</string>
     <string name="take_picture_button">Take a picture</string>
     <string name="add_note_button">Add a note</string>
     <string name="save_location_button">Save it</string>
