@@ -28,7 +28,6 @@ public class FragmentMain extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
-    private Boolean savedBike;
 
     public FragmentMain() {
         // Required empty public constructor

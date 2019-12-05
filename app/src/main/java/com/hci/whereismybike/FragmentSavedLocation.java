@@ -18,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -144,6 +147,15 @@ public class FragmentSavedLocation extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        EditText address = view.findViewById(R.id.address);
+        address.setText(sharedViewModel.getAddress());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, MMM d", Locale.getDefault());
+        String currentDateandTime = sdf.format(new Date());
+        sharedViewModel.setDateandtime(currentDateandTime);
+        TextView date = view.findViewById(R.id.date);
+        date.setText(currentDateandTime);
 
     }
 
@@ -276,9 +288,9 @@ public class FragmentSavedLocation extends Fragment {
 
     private void uploadDataToFirebase () {
         //Firebase real time
-        mDatabaseRef.child("users").child(userID).child("address").setValue("test address");
-        mDatabaseRef.child("users").child(userID).child("date").setValue("20197987");
-        mDatabaseRef.child("users").child(userID).child("note").setValue("Test note 123");
+        mDatabaseRef.child("users").child(userID).child("address").setValue(sharedViewModel.getAddress());
+        mDatabaseRef.child("users").child(userID).child("date").setValue(sharedViewModel.getDateandtime());
+        mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
 //        if(note != null){
 //            mDatabaseRef.child("users").child(userID).child("date").child("note").setValue("lol lol lol");
 //        }

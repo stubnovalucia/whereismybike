@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import android.os.Environment;
@@ -37,8 +38,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.hci.whereismybike.MainActivity;
-import com.hci.whereismybike.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,18 +54,14 @@ import java.util.Locale;
  *
  */
 public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback {
-
     private OnFragmentInteractionListener mListener;
-    FusedLocationProviderClient client;
-    GoogleMap map;
-    Location currentLocation;
-    List<Address> addresses;
-    Marker marker;
-    FileOutputStream out;
+    private GoogleMap map;
+    private Location currentLocation;
+    private FileOutputStream out;
+
+    private SharedViewModel sharedViewModel;
 
     private StorageReference mStorageRef;
-    private FirebaseAuth auth;
-    private FirebaseUser user;
     private String userID;
 
     public FragmentMarkLocation() {
@@ -90,23 +85,28 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        auth = FirebaseAuth.getInstance();
 
         //get the signed in user
-        user = auth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
 
         //Get current fused location
         final OnMapReadyCallback mapCallBack = this;
-        client = LocationServices.getFusedLocationProviderClient(getMainActivity());
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(getMainActivity());
+
         client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
             if(location != null) {
                 currentLocation = location;
                 LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                getAddress(loc);
+                //Store data
+                sharedViewModel.setLatLng(loc);
+                sharedViewModel.setAddress(getAddress(loc));
 
                 SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                 mapFragment.getMapAsync(mapCallBack);
@@ -119,7 +119,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
     public String getAddress(LatLng loc){
         try {
             Geocoder geo = new Geocoder(getMainActivity(), Locale.getDefault());
-            addresses = geo.getFromLocation(loc.latitude, loc.longitude, 1);
+            List<Address> addresses = geo.getFromLocation(loc.latitude, loc.longitude, 1);
             if (addresses.isEmpty()) {
                 System.out.println("Waiting for Location");
             }
@@ -194,9 +194,9 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         map = googleMap;
         LatLng markerPosition = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
 
-        marker = map.addMarker(new MarkerOptions()
-                .position(markerPosition)
-                .title(getAddress(markerPosition)));
+        Marker marker = map.addMarker(new MarkerOptions()
+            .position(markerPosition)
+            .title(getAddress(markerPosition)));
         marker.setDraggable(true);
 
         setCameraPosition(markerPosition);
@@ -215,6 +215,8 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
+                sharedViewModel.setLatLng(marker.getPosition());
+                sharedViewModel.setAddress(getAddress(marker.getPosition()));
                 marker.setTitle(getAddress(marker.getPosition()));
                 setCameraPosition(marker.getPosition());
             }
