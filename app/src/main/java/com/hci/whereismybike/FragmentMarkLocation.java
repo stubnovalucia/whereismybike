@@ -248,7 +248,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         });
     }
     private void uploadFile(File file){
-        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpg");
         Uri contentUri = Uri.fromFile(file);
         storageReference.putFile(contentUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

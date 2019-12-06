@@ -41,7 +41,6 @@ public class FragmentMain extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
-    File bikePhoto = null;
 
     public FragmentMain() {
         // Required empty public constructor
@@ -96,12 +95,11 @@ public class FragmentMain extends Fragment {
                 if(!dataSnapshot.hasChild(userID)){
                     sharedViewModel.setSavedBike(false);
                     markLocationButton.setText(getResources().getString(R.string.mark_it_button));
-//
-//                    sharedViewModel.setAddress("");
-//                    sharedViewModel.setDateandtime("");
-//                    sharedViewModel.setNote("");
-//                    sharedViewModel.setBikePictureTaken("");
-//                    sharedViewModel.setBikePicture(null);
+                    sharedViewModel.setAddress("");
+                    sharedViewModel.setDateandtime("");
+                    sharedViewModel.setNote("");
+                    sharedViewModel.setBikePictureTaken("");
+                    sharedViewModel.setBikePicture(null);
                 } else {
                     sharedViewModel.setSavedBike(true);
                     markLocationButton.setText(getResources().getString(R.string.show_it_button));

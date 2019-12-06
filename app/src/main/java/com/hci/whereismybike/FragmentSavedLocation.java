@@ -416,7 +416,7 @@ public class FragmentSavedLocation extends Fragment {
         }
 
         if (map != null){
-            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpg");
             storageReference.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override

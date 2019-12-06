@@ -216,6 +216,7 @@ public class FragmentRetrieveLocation extends Fragment {
             }catch (Exception e){
                 System.out.println(e.getMessage());
                 // Get it from firebase storage
+                System.out.println("FROM DATABASE");
                 GetPicture();
             }
             imageCard.setVisibility(View.VISIBLE);
@@ -274,7 +275,7 @@ public class FragmentRetrieveLocation extends Fragment {
         }
 
         if (map != null){
-            mapRefence = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+            mapRefence = mStorageRef.child("images/users/" + userID + "/map.jpg");
             mapRefence.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
