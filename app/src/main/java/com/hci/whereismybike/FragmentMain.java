@@ -40,8 +40,6 @@ public class FragmentMain extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
 
-    private DatabaseReference mDatabaseRef;
-
     public FragmentMain() {
         // Required empty public constructor
     }
@@ -63,30 +61,6 @@ public class FragmentMain extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        //get the signed in user
-        FirebaseUser user = auth.getCurrentUser();
-        String userID = user.getUid();
-
-//        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users");
-//        mDatabaseRef.child(userID);
-//        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.getValue() == null){
-//                    System.out.println("EMPTY");
-//                    sharedViewModel.setSavedBike(false);
-//                } else {
-//                    GetData();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -168,24 +142,5 @@ public class FragmentMain extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void GetData(){
-        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-                sharedViewModel.setAddress(dataMap.get("address"));
-                sharedViewModel.setDateandtime(dataMap.get("date"));
-                sharedViewModel.setNote(dataMap.get("note"));
-                sharedViewModel.setBikePictureTaken(dataMap.get("picture").equals("true"));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }
