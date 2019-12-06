@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +156,23 @@ public class FragmentMain extends Fragment {
         if(sharedViewModel.getmGoogleSignInClient() == null){
             sharedViewModel.setmGoogleSignInClient(GoogleSignIn.getClient(getActivity(), gso));
         }
+
+        //Disable the back button
+        //https://stackoverflow.com/a/36129029
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -193,7 +212,6 @@ public class FragmentMain extends Fragment {
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
                 sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
                 sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
