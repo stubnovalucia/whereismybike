@@ -66,7 +66,8 @@ public class FragmentRetrieveLocation extends Fragment {
 
     //Firebase
     private StorageReference mStorageRef;
-    private DatabaseReference mDatabaseRef;
+    private StorageReference bikeReference;
+    private StorageReference mapRefence;
     private String userID;
 
     public FragmentRetrieveLocation() {
@@ -98,14 +99,7 @@ public class FragmentRetrieveLocation extends Fragment {
         //get the signed in user
         FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
-
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-
-        if(sharedViewModel.getAddress() == null || sharedViewModel.getAddress().equals("")){
-            System.out.println("SharedViewModel address: " + sharedViewModel.getAddress());
-            GetData();
-        }
-    }
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,24 +141,24 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         });
 
-        //listener for found it button
+        //listener for directions button
         FloatingActionButton getDirectionsButton = view.findViewById(R.id.getDirectionsButton);
         //code modified from: https://stackoverflow.com/questions/2662531/launching-google-maps-directions-via-an-intent-on-android/44365894#44365894
         getDirectionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("https")
-                    .authority("www.google.com")
-                    .appendPath("maps")
-                    .appendPath("dir")
-                    .appendPath("")
-                    .appendQueryParameter("api", "1")
-                    .appendQueryParameter("destination", sharedViewModel.getAddress());
-            String url = builder.build().toString();
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.google.com")
+                        .appendPath("maps")
+                        .appendPath("dir")
+                        .appendPath("")
+                        .appendQueryParameter("api", "1")
+                        .appendQueryParameter("destination", sharedViewModel.getAddress());
+                String url = builder.build().toString();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
 
@@ -204,52 +198,7 @@ public class FragmentRetrieveLocation extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void GetPicture () {
-        System.out.println("BIKEPIC " + sharedViewModel.getBikePicture());
-        System.out.println("BIKEPIC TRUE " + sharedViewModel.getBikePictureTaken());
-        try{
-            Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
-            System.out.println("Added photo from local");
-            return;
-        }catch (Exception e){
-            System.out.println("EXCEPTION");
-            System.out.println(e.getMessage());
-            try {
-                // Create an image file name
-                String imageFileName = "bike";
-                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                image = File.createTempFile(imageFileName,"jpg",storageDir);
-            } catch (IOException ie){
-                ie.printStackTrace();
-            }
-
-            if (image != null){
-                StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
-                storageReference.getFile(image)
-                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                System.out.println("File succesfully downloaded");
-                                Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
-                                System.out.println("Added photo from database");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle failed download
-                        // ...
-                    }
-                });
-            }
-        }
-    }
-
     private void setFields () {
-
-//        if (sharedViewModel.getBikePicture != "true"){
-//            GetPicture();
-//        }
-
         EditText address = getView().findViewById(R.id.address);
         address.setText(sharedViewModel.getAddress());
 
@@ -264,12 +213,16 @@ public class FragmentRetrieveLocation extends Fragment {
         }
 
         CardView imageCard = getView().findViewById(R.id.imageCard);
-        System.out.println("PHOTOOOOOOOOOOOOOOOOOOOO " + sharedViewModel.getBikePictureTaken() + sharedViewModel.getBikePicture());
-        if (sharedViewModel.getBikePicture() == null) {
-            System.out.println("Bike picture NULL");
+        if (sharedViewModel.getBikePictureTaken().equals("false")) {
             imageCard.setVisibility(View.GONE);
         } else {
-            GetPicture();
+            try {
+                Glide.with(getContext()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                // Get it from firebase storage
+                GetPicture();
+            }
             imageCard.setVisibility(View.VISIBLE);
         }
 
@@ -287,25 +240,33 @@ public class FragmentRetrieveLocation extends Fragment {
         }
     }
 
-    private void GetData(){
-        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    private void GetPicture () {
+        try {
+            // Create an image file name
+            String imageFileName = "bike";
+            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            image = File.createTempFile(imageFileName,"jpg",storageDir);
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
 
-                sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
-                sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
-                sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
-                sharedViewModel.setBikePictureTaken(dataSnapshot.child("picture").getValue(String.class));
-                System.out.println("Data from database: " + sharedViewModel.getAddress() + sharedViewModel.getDateandtime() + sharedViewModel.getNote() + sharedViewModel.getBikePictureTaken());
-
-                setFields();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        if (image != null){
+            bikeReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+            bikeReference.getFile(image)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println("File succesfully downloaded");
+                            Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    // ...
+                }
+            });
+        }
     }
     private void GetMap () {
         try {
@@ -318,8 +279,8 @@ public class FragmentRetrieveLocation extends Fragment {
         }
 
         if (map != null){
-            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
-            storageReference.getFile(map)
+            mapRefence = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+            mapRefence.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -336,10 +297,9 @@ public class FragmentRetrieveLocation extends Fragment {
         }
     }
     private void DeleteEntryFromFirebase(){
+        DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
         mDatabaseRef.removeValue();
-        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
-        storageReference.delete();
-        storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpeg");
-        storageReference.delete();
+        mapRefence.delete();
+        bikeReference.delete();
     }
 }

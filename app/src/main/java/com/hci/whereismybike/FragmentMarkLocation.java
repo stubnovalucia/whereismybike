@@ -96,24 +96,24 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         userID = user.getUid();
 
         //Get current fused location
-        final OnMapReadyCallback mapCallBack = this;
-        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(getMainActivity());
-
-        client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if(location != null) {
-                    currentLocation = location;
-                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                    //Store data
-                    sharedViewModel.setLatLng(loc);
-                    sharedViewModel.setAddress(getAddress(loc));
-
-                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                    mapFragment.getMapAsync(mapCallBack);
-                }
-            }
-        });
+//        final OnMapReadyCallback mapCallBack = this;
+//        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(getMainActivity());
+//
+//        client.getLastLocation().addOnSuccessListener(getMainActivity(), new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if(location != null) {
+//                    currentLocation = location;
+//                    LatLng loc = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//                    //Store data
+//                    sharedViewModel.setLatLng(loc);
+//                    sharedViewModel.setAddress(getAddress(loc));
+//
+//                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+//                    mapFragment.getMapAsync(mapCallBack);
+//                }
+//            }
+//        });
     }
 
     //Get address by decoding location
@@ -162,7 +162,8 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takeMapSnapshot(view);
+//                takeMapSnapshot(view);
+                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
             }
         });
     }

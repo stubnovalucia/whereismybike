@@ -106,20 +106,20 @@ public class FragmentMain extends Fragment {
                 if(!dataSnapshot.hasChild(userID)){
                     sharedViewModel.setSavedBike(false);
                     markLocationButton.setText(getResources().getString(R.string.mark_it_button));
-
-                    sharedViewModel.setAddress("");
-                    sharedViewModel.setDateandtime("");
-                    sharedViewModel.setNote("");
-                    sharedViewModel.setBikePictureTaken("");
-                    sharedViewModel.setBikePicture(null);
+//
+//                    sharedViewModel.setAddress("");
+//                    sharedViewModel.setDateandtime("");
+//                    sharedViewModel.setNote("");
+//                    sharedViewModel.setBikePictureTaken("");
+//                    sharedViewModel.setBikePicture(null);
                 } else {
                     sharedViewModel.setSavedBike(true);
                     markLocationButton.setText(getResources().getString(R.string.show_it_button));
                     GetData();
-                    GetPicture();
+                    //GetPicture();
                 }
                 markLocationButton.setVisibility(View.VISIBLE);
-                mDatabaseRef.removeEventListener(this);
+//                mDatabaseRef.removeEventListener(this);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -209,6 +209,7 @@ public class FragmentMain extends Fragment {
     }
 
     private void GetData(){
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -225,37 +226,37 @@ public class FragmentMain extends Fragment {
         });
     }
 
-    private void GetPicture () {
-        System.out.println("BIKEPIC " + sharedViewModel.getBikePicture());
-        System.out.println("BIKEPIC TRUE " + sharedViewModel.getBikePictureTaken());
-
-        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        try {
-            // Create an image file name
-            String imageFileName = "bike";
-            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            bikePhoto = File.createTempFile(imageFileName,"jpg",storageDir);
-        } catch (IOException ie){
-            ie.printStackTrace();
-        }
-
-        if (bikePhoto != null){
-            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
-            storageReference.getFile(bikePhoto)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            sharedViewModel.setBikePicture(bikePhoto);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                        // Handle failed download
-                        // ...
-                }
-            });
-        }
-    }
+//    private void GetPicture () {
+//        System.out.println("BIKEPIC " + sharedViewModel.getBikePicture());
+//        System.out.println("BIKEPIC TRUE " + sharedViewModel.getBikePictureTaken());
+//
+//        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+//
+//        try {
+//            // Create an image file name
+//            String imageFileName = "bike";
+//            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//            bikePhoto = File.createTempFile(imageFileName,"jpg",storageDir);
+//        } catch (IOException ie){
+//            ie.printStackTrace();
+//        }
+//
+//        if (bikePhoto != null){
+//            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+//            storageReference.getFile(bikePhoto)
+//                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                            sharedViewModel.setBikePicture(bikePhoto);
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//
+//                @Override
+//                public void onFailure(@NonNull Exception exception) {
+//                        // Handle failed download
+//                        // ...
+//                }
+//            });
+//        }
+//    }
 }
