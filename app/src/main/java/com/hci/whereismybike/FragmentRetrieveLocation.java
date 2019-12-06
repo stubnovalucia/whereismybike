@@ -61,8 +61,6 @@ public class FragmentRetrieveLocation extends Fragment {
 
     //Firebase
     private StorageReference mStorageRef;
-    private StorageReference bikeReference;
-    private StorageReference mapRefence;
     private String userID;
 
     public FragmentRetrieveLocation() {
@@ -247,7 +245,7 @@ public class FragmentRetrieveLocation extends Fragment {
         }
 
         if (image != null){
-            bikeReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+            StorageReference bikeReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
             bikeReference.getFile(image)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -275,7 +273,7 @@ public class FragmentRetrieveLocation extends Fragment {
         }
 
         if (map != null){
-            mapRefence = mStorageRef.child("images/users/" + userID + "/map.jpg");
+            StorageReference mapRefence = mStorageRef.child("images/users/" + userID + "/map.jpg");
             mapRefence.getFile(map)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -295,7 +293,31 @@ public class FragmentRetrieveLocation extends Fragment {
     private void DeleteEntryFromFirebase(){
         DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
         mDatabaseRef.removeValue();
-        mapRefence.delete();
-        bikeReference.delete();
+        StorageReference bikeRef = FirebaseStorage.getInstance().getReference("/images/users/"+userID+"/bike.jpg");
+        StorageReference mapRef = FirebaseStorage.getInstance().getReference("/images/users/"+userID+"/map.jpg");
+
+        bikeRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+                System.out.println(exception.getMessage());
+            }
+        });
+        mapRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
     }
 }

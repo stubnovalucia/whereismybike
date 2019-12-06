@@ -162,7 +162,8 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
         markLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               takeMapSnapshot(view);
+                Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
+                //takeMapSnapshot(view);
             }
         });
     }
