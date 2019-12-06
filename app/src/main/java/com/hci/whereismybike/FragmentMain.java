@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -103,14 +105,17 @@ public class FragmentMain extends Fragment {
                 }
             }
         });
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        //if signed in, sets the user in sharedview
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        if(sharedViewModel.getmGoogleSignInClient() == null){
+            sharedViewModel.setmGoogleSignInClient(GoogleSignIn.getClient(getActivity(), gso));
         }
     }
+
 
     @Override
     public void onAttach(Context context) {
