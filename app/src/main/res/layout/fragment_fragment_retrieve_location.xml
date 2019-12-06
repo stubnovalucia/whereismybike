@@ -104,7 +104,7 @@
                 android:id="@+id/noteCard"
                 android:visibility="visible"
                 android:layout_width="340dp"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -141,6 +141,16 @@
                             android:textStyle="bold" />
 
                     </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/noteText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
