@@ -24,6 +24,7 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/foundItButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -33,7 +34,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/locationInfo"

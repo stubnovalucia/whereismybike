@@ -124,6 +124,18 @@ public class FragmentSavedLocation extends Fragment {
             }
         });
 
+        //listener for add note button
+        Button addNoteButton = view.findViewById(R.id.addNoteButton);
+        addNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
+                addNoteBtn.setVisibility(View.GONE);
+                CardView imageCard = getView().findViewById(R.id.noteCard);
+                imageCard.setVisibility(View.VISIBLE);
+            }
+        });
+
         //listener for save location button
         Button saveLocationButton = view.findViewById(R.id.saveLocationButton);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +143,7 @@ public class FragmentSavedLocation extends Fragment {
             public void onClick(View view) {
                 uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
+                
                 // find the CoordinatorLayout id
                 // Make and display Snackbar
                 Snackbar snackbar = Snackbar.make(view, "Location saved",
@@ -157,9 +170,20 @@ public class FragmentSavedLocation extends Fragment {
         deletePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Button takePictureBtn = view.findViewById(R.id.takePictureButton);
-                //takePictureBtn.setVisibility(View.VISIBLE);
+                Button takePictureBtn = getView().findViewById(R.id.takePictureButton);
+                takePictureBtn.setVisibility(View.VISIBLE);
                 CardView imageCard = getView().findViewById(R.id.imageCard);
+                imageCard.setVisibility(View.GONE);
+            }
+        });
+
+        ImageButton deleteNoteButton = view.findViewById(R.id.deleteNote);
+        deleteNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
+                addNoteBtn.setVisibility(View.VISIBLE);
+                CardView imageCard = getView().findViewById(R.id.noteCard);
                 imageCard.setVisibility(View.GONE);
             }
         });
@@ -300,7 +324,7 @@ public class FragmentSavedLocation extends Fragment {
 
             //hide take picture button and show the photo card
             Button takePictureBtn = getView().findViewById(R.id.takePictureButton);
-            takePictureBtn .setVisibility(View.GONE);
+            takePictureBtn.setVisibility(View.GONE);
             CardView imageCard = getView().findViewById(R.id.imageCard);
             imageCard.setVisibility(View.VISIBLE);
 
@@ -308,6 +332,7 @@ public class FragmentSavedLocation extends Fragment {
             galleryAddPic();
         }
     }
+
     private void uploadFile(Uri file){
         StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
         storageReference.putFile(file)

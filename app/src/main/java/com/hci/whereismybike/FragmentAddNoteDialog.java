@@ -93,7 +93,10 @@ public class FragmentAddNoteDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        //LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+
         builder.setMessage("hello")
+                //.setTitle("")
                 .setPositiveButton("fire", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
@@ -119,7 +122,6 @@ public class FragmentAddNoteDialog extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
