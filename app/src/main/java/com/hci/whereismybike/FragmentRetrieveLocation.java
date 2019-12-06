@@ -194,7 +194,7 @@ public class FragmentRetrieveLocation extends Fragment {
     }
 
     private void setFields () {
-        EditText address = getView().findViewById(R.id.address);
+        TextView address = getView().findViewById(R.id.address);
         address.setText(sharedViewModel.getAddress());
 
         TextView date = getView().findViewById(R.id.date);
