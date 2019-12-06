@@ -19,9 +19,6 @@
         <action
             android:id="@+id/action_fragmentMain_to_fragmentRetrieveLocation"
             app:destination="@id/fragmentRetrieveLocation" />
-        <action
-            android:id="@+id/action_fragmentMain_to_savedLocationFragment"
-            app:destination="@id/savedLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSettings"

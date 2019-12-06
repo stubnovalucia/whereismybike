@@ -4,12 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -81,38 +86,30 @@ public class MainActivity extends AppCompatActivity  implements
         sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         sharedViewModel.setSavedBike(false);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        //get the signed in user
-        FirebaseUser user = auth.getCurrentUser();
-        userID = user.getUid();
+        //Checks if signed in - modified code from: https://stackoverflow.com/a/53992737
+        NavHostFragment navHost = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        NavController navController = navHost.getNavController();
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("users");
-        mDatabaseRef.addListenerForSingleValueEvent(valueEvent);
+        NavInflater navInflater = navController.getNavInflater();
+        NavGraph graph = navInflater.inflate(R.navigation.nav_graph);
 
+        if (isSignedIn()) {
+            graph.setStartDestination(R.id.fragmentMain);
+        } else {
+            graph.setStartDestination(R.id.fragmentSignIn);
+        }
+
+        navController.setGraph(graph);
+    }
+
+    private boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(getApplicationContext()) != null;
     }
 
     //To be done
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
-    private void GetData(){
-        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-                sharedViewModel.setAddress(dataMap.get("address"));
-                sharedViewModel.setDateandtime(dataMap.get("date"));
-                sharedViewModel.setNote(dataMap.get("note"));
-                sharedViewModel.setBikePictureTaken(dataMap.get("picture").equals("true"));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
 }
