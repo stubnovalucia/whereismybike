@@ -46,6 +46,10 @@ public class FragmentMain extends Fragment {
         // Required empty public constructor
     }
 
+    //Firebase
+    private DatabaseReference mDatabaseRef;
+    private String userID;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -76,14 +80,42 @@ public class FragmentMain extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button markLocationButton = view.findViewById(R.id.markLocationButton);
+        final Button markLocationButton = view.findViewById(R.id.markLocationButton);
+
+        //Firebase
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        //get the signed in user
+        FirebaseUser user = auth.getCurrentUser();
+        userID = user.getUid();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users");
+
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(userID)){
+                    System.out.println("EMPTY");
+                    sharedViewModel.setSavedBike(false);
+                    markLocationButton.setText(getResources().getString(R.string.mark_it_button));
+                } else {
+                    System.out.println("FRAGMENT MAIN");
+                    sharedViewModel.setSavedBike(true);
+                    markLocationButton.setText(getResources().getString(R.string.show_it_button));
+                    GetData();
+                }
+                mDatabaseRef.removeEventListener(this);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //Conditional navigation
-        if (sharedViewModel.getSavedBike().getValue()) {
-            markLocationButton.setText(getResources().getString(R.string.show_it_button));
-        } else {
-            markLocationButton.setText(getResources().getString(R.string.mark_it_button));
-        }
+//        if (sharedViewModel.getSavedBike().getValue()) {
+//            markLocationButton.setText(getResources().getString(R.string.show_it_button));
+//        } else {
+//            markLocationButton.setText(getResources().getString(R.string.mark_it_button));
+//        }
 
         //listener for settings icon
         ImageView settingsCog = view.findViewById(R.id.settingsCog);
@@ -147,5 +179,30 @@ public class FragmentMain extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void GetData(){
+        mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
+                //Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
+//                sharedViewModel.setAddress(dataMap.get("address"));
+//                sharedViewModel.setDateandtime(dataMap.get("date"));
+//                sharedViewModel.setNote(dataMap.get("note"));
+//                sharedViewModel.setBikePictureTaken(dataMap.get("picture"));
+
+                sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
+                sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
+                sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
+                sharedViewModel.setBikePictureTaken(dataSnapshot.child("picture").getValue(String.class));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

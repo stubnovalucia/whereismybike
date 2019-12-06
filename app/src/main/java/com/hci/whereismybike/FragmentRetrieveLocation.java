@@ -168,7 +168,7 @@ public class FragmentRetrieveLocation extends Fragment {
         });
 
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
-        if (sharedViewModel.getBikePictureTaken()){
+        if (sharedViewModel.getBikePictureTaken() == "true"){
             GetPicture();
         }
 
@@ -282,10 +282,15 @@ public class FragmentRetrieveLocation extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
                 Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-                sharedViewModel.setAddress(dataMap.get("address"));
-                sharedViewModel.setDateandtime(dataMap.get("date"));
-                sharedViewModel.setNote(dataMap.get("note"));
-                sharedViewModel.setBikePictureTaken(dataMap.get("picture").equals("true"));
+//                sharedViewModel.setAddress(dataMap.get("address"));
+//                sharedViewModel.setDateandtime(dataMap.get("date"));
+//                sharedViewModel.setNote(dataMap.get("note"));
+//                sharedViewModel.setBikePictureTaken(dataMap.get("picture"));
+
+                sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
+                sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
+                sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
+                sharedViewModel.setBikePictureTaken(dataSnapshot.child("picture").getValue(String.class));
             }
 
             @Override
