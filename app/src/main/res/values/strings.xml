@@ -18,6 +18,8 @@
     <string name="retrieve_location_fragment">Retrieve Location Fragment</string>
     <string name="get_directions_button">Get directions</string>
     <string name="found_it_button">Found it</string>
+    <string name="cancel">Cancel</string>
+    <string name="found_it">Found it</string>
 
     //Saved Location Fragment
     <string name="saved_location_fragment">Saved Location Fragment</string>

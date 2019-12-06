@@ -149,7 +149,7 @@
                 android:id="@+id/imageCard"
                 android:visibility="visible"
                 android:layout_width="340dp"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,8 +189,9 @@
                     <ImageView
                         android:id="@+id/bikePhotoView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:src="@android:color/background_light"
+                        android:adjustViewBounds="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -209,7 +210,7 @@
         android:layout_height="80dp"
         android:background="@color/blueGrey"
         android:text="@string/found_it_button"
-        android:drawableEnd="@drawable/pin"
+        android:drawableEnd="@drawable/ic_place_red_35dp"
         android:paddingRight="95dp"
         android:paddingLeft="95dp"
         android:textColor="#F7F7F7"
@@ -237,6 +238,7 @@
         android:backgroundTint="@color/blueGrey"
         android:src="@drawable/ic_directions_black_48dp"
         android:layout_marginBottom="16dp"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toTopOf="@+id/foundItButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

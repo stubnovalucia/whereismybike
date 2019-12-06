@@ -1,6 +1,8 @@
 package com.hci.whereismybike;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -121,8 +123,26 @@ public class FragmentRetrieveLocation extends Fragment {
         foundItButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedViewModel.setSavedBike(false);
-                Navigation.findNavController(view).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+                alertDialogBuilder.setTitle("FOUND IT?");
+                alertDialogBuilder.setMessage("If you confirm, saved location will be lost.");
+
+                alertDialogBuilder.setPositiveButton(R.string.found_it, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        sharedViewModel.setSavedBike(false);
+                        Navigation.findNavController(getView()).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
+                    }
+                });
+                alertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.blueGrey));
+                alertDialog.getButton(alertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.lightGreen));
             }
         });
 

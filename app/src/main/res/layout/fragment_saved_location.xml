@@ -24,6 +24,7 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/saveLocationButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -176,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="290dp"
-                            android:src="@drawable/ic_close_black_24dp" />
+                            android:src="@drawable/ic_close_white_24dp" />
                     </FrameLayout>
 
                 </LinearLayout>
@@ -186,7 +187,7 @@
                 android:id="@+id/imageCard"
                 android:visibility="gone"
                 android:layout_width="340dp"
-                android:layout_height="500sp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,14 +228,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="290dp"
-                            android:src="@drawable/ic_close_black_24dp" />
+                            android:src="@drawable/ic_close_white_24dp" />
                     </FrameLayout>
 
                     <ImageView
                         android:id="@+id/bikePhotoView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:src="@android:color/background_light"
+                        android:adjustViewBounds="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -251,7 +253,7 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:background="@color/blueGrey"
-        android:drawableEnd="@drawable/pin"
+        android:drawableEnd="@drawable/ic_place_red_35dp"
         android:paddingRight="105dp"
         android:paddingLeft="105dp"
         android:text="@string/save_location_button"

@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/blueGrey"
-        android:drawableEnd="@drawable/pin"
+        android:drawableEnd="@drawable/ic_place_red_35dp"
         android:paddingLeft="100dp"
         android:paddingRight="100dp"
         android:text="@string/mark_it_button"
