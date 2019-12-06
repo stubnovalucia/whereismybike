@@ -59,7 +59,6 @@ public class FragmentSavedLocation extends Fragment {
 
     //imageview displaying bike photo
     private ImageView bikePhotoView;
-    private File image;
 
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
