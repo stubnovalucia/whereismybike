@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +29,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -41,6 +49,7 @@ public class FragmentMain extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
+    File bikePhoto = null;
 
     public FragmentMain() {
         // Required empty public constructor
@@ -93,15 +102,21 @@ public class FragmentMain extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(userID)){
-                    System.out.println("EMPTY");
                     sharedViewModel.setSavedBike(false);
                     markLocationButton.setText(getResources().getString(R.string.mark_it_button));
+
+                    sharedViewModel.setAddress("");
+                    sharedViewModel.setDateandtime("");
+                    sharedViewModel.setNote("");
+                    sharedViewModel.setBikePictureTaken("");
+                    sharedViewModel.setBikePicture(null);
                 } else {
-                    System.out.println("FRAGMENT MAIN");
                     sharedViewModel.setSavedBike(true);
                     markLocationButton.setText(getResources().getString(R.string.show_it_button));
                     GetData();
+                    GetPicture();
                 }
+                markLocationButton.setVisibility(View.VISIBLE);
                 mDatabaseRef.removeEventListener(this);
             }
             @Override
@@ -109,13 +124,6 @@ public class FragmentMain extends Fragment {
 
             }
         });
-
-        //Conditional navigation
-//        if (sharedViewModel.getSavedBike().getValue()) {
-//            markLocationButton.setText(getResources().getString(R.string.show_it_button));
-//        } else {
-//            markLocationButton.setText(getResources().getString(R.string.mark_it_button));
-//        }
 
         //listener for settings icon
         ImageView settingsCog = view.findViewById(R.id.settingsCog);
@@ -185,18 +193,11 @@ public class FragmentMain extends Fragment {
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                //Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-//                sharedViewModel.setAddress(dataMap.get("address"));
-//                sharedViewModel.setDateandtime(dataMap.get("date"));
-//                sharedViewModel.setNote(dataMap.get("note"));
-//                sharedViewModel.setBikePictureTaken(dataMap.get("picture"));
 
                 sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
                 sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
                 sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
                 sharedViewModel.setBikePictureTaken(dataSnapshot.child("picture").getValue(String.class));
-
             }
 
             @Override
@@ -204,5 +205,39 @@ public class FragmentMain extends Fragment {
 
             }
         });
+    }
+
+    private void GetPicture () {
+        System.out.println("BIKEPIC " + sharedViewModel.getBikePicture());
+        System.out.println("BIKEPIC TRUE " + sharedViewModel.getBikePictureTaken());
+
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        try {
+            // Create an image file name
+            String imageFileName = "bike";
+            File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            bikePhoto = File.createTempFile(imageFileName,"jpg",storageDir);
+        } catch (IOException ie){
+            ie.printStackTrace();
+        }
+
+        if (bikePhoto != null){
+            StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+            storageReference.getFile(bikePhoto)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            sharedViewModel.setBikePicture(bikePhoto);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                        // Handle failed download
+                        // ...
+                }
+            });
+        }
     }
 }

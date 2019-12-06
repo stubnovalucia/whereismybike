@@ -102,6 +102,7 @@ public class FragmentRetrieveLocation extends Fragment {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
         if(sharedViewModel.getAddress() == null || sharedViewModel.getAddress().equals("")){
+            System.out.println("SharedViewModel address: " + sharedViewModel.getAddress());
             GetData();
         }
     }
@@ -167,46 +168,8 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         });
 
-        bikePhotoView = view.findViewById(R.id.bikePhotoView);
-        if (sharedViewModel.getBikePictureTaken() == "true"){
-            GetPicture();
-        }
-
-        EditText address = view.findViewById(R.id.address);
-        address.setText(sharedViewModel.getAddress());
-
-        TextView date = view.findViewById(R.id.date);
-        date.setText(sharedViewModel.getDateandtime());
-
-
-        if (sharedViewModel.getNote() == null || sharedViewModel.getNote().isEmpty()) {
-            CardView noteCard = getView().findViewById(R.id.noteCard);
-            noteCard.setVisibility(View.GONE);
-        }
-
-        if (sharedViewModel.getBikePicture() == null) {
-            CardView imageCard = getView().findViewById(R.id.imageCard);
-            imageCard.setVisibility(View.GONE);
-        }
-
-        TextView noteText = view.findViewById(R.id.noteText);
-        noteText.setText(sharedViewModel.getNote());
-
-        mapView = view.findViewById(R.id.mapView);
-        try {
-            Glide.with(getContext()).load(Uri.fromFile(sharedViewModel.getMap())).into(mapView);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            // Get it from firebase storage
-            GetMap();
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        bikePhotoView = getView().findViewById(R.id.bikePhotoView);
+        setFields();
     }
 
     @Override
@@ -242,8 +205,11 @@ public class FragmentRetrieveLocation extends Fragment {
     }
 
     private void GetPicture () {
+        System.out.println("BIKEPIC " + sharedViewModel.getBikePicture());
+        System.out.println("BIKEPIC TRUE " + sharedViewModel.getBikePictureTaken());
         try{
             Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
+            System.out.println("Added photo from local");
             return;
         }catch (Exception e){
             System.out.println("EXCEPTION");
@@ -265,6 +231,7 @@ public class FragmentRetrieveLocation extends Fragment {
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 System.out.println("File succesfully downloaded");
                                 Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                                System.out.println("Added photo from database");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -276,21 +243,62 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         }
     }
+
+    private void setFields () {
+
+//        if (sharedViewModel.getBikePicture != "true"){
+//            GetPicture();
+//        }
+
+        EditText address = getView().findViewById(R.id.address);
+        address.setText(sharedViewModel.getAddress());
+
+        TextView date = getView().findViewById(R.id.date);
+        date.setText(sharedViewModel.getDateandtime());
+
+        CardView noteCard = getView().findViewById(R.id.noteCard);
+        if (sharedViewModel.getNote() == null || sharedViewModel.getNote().isEmpty()) {
+            noteCard.setVisibility(View.GONE);
+        } else {
+            noteCard.setVisibility(View.VISIBLE);
+        }
+
+        CardView imageCard = getView().findViewById(R.id.imageCard);
+        System.out.println("PHOTOOOOOOOOOOOOOOOOOOOO " + sharedViewModel.getBikePictureTaken() + sharedViewModel.getBikePicture());
+        if (sharedViewModel.getBikePicture() == null) {
+            System.out.println("Bike picture NULL");
+            imageCard.setVisibility(View.GONE);
+        } else {
+            GetPicture();
+            imageCard.setVisibility(View.VISIBLE);
+        }
+
+        TextView noteText = getView().findViewById(R.id.noteText);
+        noteText.setText(sharedViewModel.getNote());
+
+        mapView = getView().findViewById(R.id.mapView);
+
+        try {
+            Glide.with(getContext()).load(Uri.fromFile(sharedViewModel.getMap())).into(mapView);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            // Get it from firebase storage
+            GetMap();
+        }
+    }
+
     private void GetData(){
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-//                sharedViewModel.setAddress(dataMap.get("address"));
-//                sharedViewModel.setDateandtime(dataMap.get("date"));
-//                sharedViewModel.setNote(dataMap.get("note"));
-//                sharedViewModel.setBikePictureTaken(dataMap.get("picture"));
 
                 sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
                 sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
                 sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
                 sharedViewModel.setBikePictureTaken(dataSnapshot.child("picture").getValue(String.class));
+                System.out.println("Data from database: " + sharedViewModel.getAddress() + sharedViewModel.getDateandtime() + sharedViewModel.getNote() + sharedViewModel.getBikePictureTaken());
+
+                setFields();
             }
 
             @Override
@@ -329,5 +337,9 @@ public class FragmentRetrieveLocation extends Fragment {
     }
     private void DeleteEntryFromFirebase(){
         mDatabaseRef.removeValue();
+        StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/map.jpeg");
+        storageReference.delete();
+        storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpeg");
+        storageReference.delete();
     }
 }

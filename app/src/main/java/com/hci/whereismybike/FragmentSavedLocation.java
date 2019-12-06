@@ -128,7 +128,7 @@ public class FragmentSavedLocation extends Fragment {
             noteText.setText(sharedViewModel.getNote());
         }
 
-        if (sharedViewModel.getBikePicture() != null) {
+        if (sharedViewModel.getBikePicture() != null && currentPhotoPath != null && !currentPhotoPath.isEmpty()) {
             Button takePictureBtn = getView().findViewById(R.id.takePictureButton);
             takePictureBtn.setVisibility(View.GONE);
             CardView imageCard = getView().findViewById(R.id.imageCard);
@@ -170,6 +170,13 @@ public class FragmentSavedLocation extends Fragment {
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                EditText noteText = getView().findViewById(R.id.noteText);
+                note = noteText.getText().toString();
+                if(note != null && !note.isEmpty()) {
+                    sharedViewModel.setNote(note);
+                }
+
                 uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
 
@@ -227,7 +234,7 @@ public class FragmentSavedLocation extends Fragment {
                  if (!hasFocus) {
                      note = noteText.getText().toString();
                      if(note != null && !note.isEmpty()) {
-                         sharedViewModel.setNote(note);
+                         //sharedViewModel.setNote(note);
                      } else {
                          Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
                          addNoteBtn.setVisibility(View.VISIBLE);
@@ -269,13 +276,6 @@ public class FragmentSavedLocation extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -311,9 +311,6 @@ public class FragmentSavedLocation extends Fragment {
 
     //Camera feature
 
-    /**
-     *
-     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -333,9 +330,6 @@ public class FragmentSavedLocation extends Fragment {
 
     static final int REQUEST_TAKE_PHOTO = 1;
 
-    /**
-     *
-     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -371,7 +365,7 @@ public class FragmentSavedLocation extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("activityResult " );
+
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 
             //hide take picture button and show the photo card
@@ -411,6 +405,7 @@ public class FragmentSavedLocation extends Fragment {
         }
         mDatabaseRef.child("users").child(userID).child("picture").setValue(sharedViewModel.getBikePictureTaken());
     }
+
     public void GetMap () {
         try {
             // Create an image file name
@@ -440,37 +435,4 @@ public class FragmentSavedLocation extends Fragment {
         }
     }
 
-    public void GetPicture () {
-        try{
-            Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            try {
-                // Create an image file name
-                String imageFileName = "bike";
-                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                image = File.createTempFile(imageFileName,"jpg",storageDir);
-            } catch (IOException ie){
-                ie.printStackTrace();
-            }
-
-            if (image != null){
-                StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
-                storageReference.getFile(image)
-                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                System.out.println("File succesfully downloaded");
-                                Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle failed download
-                        // ...
-                    }
-                });
-            }
-        }
-    }
 }

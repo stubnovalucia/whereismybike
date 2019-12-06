@@ -114,31 +114,8 @@ public class FragmentSignIn extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
-//        if (account != null) {
-//            Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
-//        }
-
-        //updateUI(account);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.googleSignInButton:
-//                signIn();
-//                break;
-//        }
-//    }
 
     private void signIn() {
         Intent signInIntent = sharedViewModel.getmGoogleSignInClient().getSignInIntent();
