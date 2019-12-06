@@ -323,6 +323,6 @@ public class FragmentRetrieveLocation extends Fragment {
         }
     }
     private void DeleteEntryFromFirebase(){
-        mDatabaseRef.child("users").child(userID).removeValue();
+        mDatabaseRef.removeValue();
     }
 }

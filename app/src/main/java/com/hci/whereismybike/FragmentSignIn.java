@@ -164,7 +164,7 @@ public class FragmentSignIn extends Fragment {
             firebaseAuthWithGoogle(account);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
-            Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
+            //Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -185,6 +185,7 @@ public class FragmentSignIn extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Navigation.findNavController(getView()).navigate(R.id.action_fragmentSignIn_to_fragmentMain);
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

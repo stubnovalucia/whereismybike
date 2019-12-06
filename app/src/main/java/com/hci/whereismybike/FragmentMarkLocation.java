@@ -130,7 +130,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                     if(address.contains("null") || address.contains("Unnamed")){
                         return loc.latitude + "," + loc.longitude;
                     }
-                    Toast toast = Toast.makeText(getMainActivity(), "Address:- " + address, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getMainActivity(), "Address: " + address, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM,0,250);
                     toast.show();
                     return address;
@@ -242,7 +242,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                     Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
                     uploadFile(image);
                 }catch (Exception e){
-                    System.out.println(e.getMessage());
+                    System.out.println("Exception: "+e.getMessage());
                 }
             }
         });
@@ -260,7 +260,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        System.out.println(exception.getMessage());
+                        System.out.println("Exception "+exception.getMessage());
                     }
                 });
     }
