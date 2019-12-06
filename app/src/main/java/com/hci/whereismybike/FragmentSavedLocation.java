@@ -59,6 +59,8 @@ public class FragmentSavedLocation extends Fragment {
 
     //imageview displaying bike photo
     private ImageView bikePhotoView;
+    private File image;
+
     private OnFragmentInteractionListener mListener;
     private SharedViewModel sharedViewModel;
 
@@ -113,6 +115,31 @@ public class FragmentSavedLocation extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (sharedViewModel.getNote() != null && !sharedViewModel.getNote().isEmpty()) {
+            Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
+            addNoteBtn.setVisibility(View.GONE);
+            CardView noteCard = getView().findViewById(R.id.noteCard);
+            noteCard.setVisibility(View.VISIBLE);
+
+            EditText noteText = getView().findViewById(R.id.noteText);
+            noteText.setText(sharedViewModel.getNote());
+        }
+
+        if (sharedViewModel.getBikePicture() != null) {
+            Button takePictureBtn = getView().findViewById(R.id.takePictureButton);
+            takePictureBtn.setVisibility(View.GONE);
+            CardView imageCard = getView().findViewById(R.id.imageCard);
+            imageCard.setVisibility(View.VISIBLE);
+
+            Glide.with(getActivity()).load(currentPhotoPath).into(bikePhotoView);
+
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -150,7 +177,7 @@ public class FragmentSavedLocation extends Fragment {
 
                 // Snackbar for location confirmation
                 Snackbar snackbar = Snackbar.make(view, "Location saved",
-                        Snackbar.LENGTH_LONG);
+                        Snackbar.LENGTH_SHORT);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -224,6 +251,8 @@ public class FragmentSavedLocation extends Fragment {
 
         EditText address = view.findViewById(R.id.address);
         address.setText(sharedViewModel.getAddress());
+
+        noteText.setText(sharedViewModel.getNote());
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, MMM d", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
@@ -409,6 +438,40 @@ public class FragmentSavedLocation extends Fragment {
                     // ...
                 }
             });
+        }
+    }
+
+    public void GetPicture () {
+        try{
+            Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            try {
+                // Create an image file name
+                String imageFileName = "bike";
+                File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                image = File.createTempFile(imageFileName,"jpg",storageDir);
+            } catch (IOException ie){
+                ie.printStackTrace();
+            }
+
+            if (image != null){
+                StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
+                storageReference.getFile(image)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                System.out.println("File succesfully downloaded");
+                                Glide.with(getActivity()).load(Uri.fromFile(image)).into(bikePhotoView);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle failed download
+                        // ...
+                    }
+                });
+            }
         }
     }
 }
