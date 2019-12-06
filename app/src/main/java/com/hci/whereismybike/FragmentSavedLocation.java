@@ -207,6 +207,9 @@ public class FragmentSavedLocation extends Fragment {
                 takePictureBtn.setVisibility(View.VISIBLE);
                 CardView imageCard = getView().findViewById(R.id.imageCard);
                 imageCard.setVisibility(View.GONE);
+                sharedViewModel.setBikePictureTaken("false");
+                sharedViewModel.setBikePicture(null);
+                DeletePhotoFromFirebase();
             }
         });
 
@@ -219,6 +222,7 @@ public class FragmentSavedLocation extends Fragment {
                 addNoteBtn.setVisibility(View.VISIBLE);
                 CardView noteCard = getView().findViewById(R.id.noteCard);
                 noteCard.setVisibility(View.GONE);
+                sharedViewModel.setNote("");
             }
         });
 
@@ -432,6 +436,24 @@ public class FragmentSavedLocation extends Fragment {
                 }
             });
         }
+    }
+
+    private void DeletePhotoFromFirebase(){
+        //DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+        StorageReference bikeRef = FirebaseStorage.getInstance().getReference("/images/users/"+userID+"/bike.jpg");
+
+        bikeRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+                System.out.println(exception.getMessage());
+            }
+        });
     }
 
 }
