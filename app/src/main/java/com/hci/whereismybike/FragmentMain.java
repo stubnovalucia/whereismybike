@@ -104,7 +104,6 @@ public class FragmentMain extends Fragment {
                     sharedViewModel.setSavedBike(true);
                     markLocationButton.setText(getResources().getString(R.string.show_it_button));
                     GetData();
-                    //GetPicture();
                 }
                 markLocationButton.setVisibility(View.VISIBLE);
             }

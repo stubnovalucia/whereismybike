@@ -163,7 +163,7 @@ public class FragmentMarkLocation extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_markLocationFragment_to_savedLocationFragment);
-                //takeMapSnapshot(view);
+                takeMapSnapshot(view);
             }
         });
     }

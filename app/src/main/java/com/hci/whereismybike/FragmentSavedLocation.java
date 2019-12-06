@@ -73,7 +73,7 @@ public class FragmentSavedLocation extends Fragment {
     private File map;
 
     private String currentPhotoPath;
-    private String note;
+    private EditText noteText;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -156,6 +156,7 @@ public class FragmentSavedLocation extends Fragment {
         addNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                noteText = getView().findViewById(R.id.noteText);
                 Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
                 addNoteBtn.setVisibility(View.GONE);
                 CardView noteCard = getView().findViewById(R.id.noteCard);
@@ -170,10 +171,9 @@ public class FragmentSavedLocation extends Fragment {
             @Override
             public void onClick(View view) {
 
-                EditText noteText = getView().findViewById(R.id.noteText);
-                note = noteText.getText().toString();
-                if(note != null && !note.isEmpty()) {
-                    sharedViewModel.setNote(note);
+                noteText = getView().findViewById(R.id.noteText);
+                if(!noteText.getText().toString().isEmpty()) {
+                    sharedViewModel.setNote(noteText.getText().toString());
                 }
 
                 uploadDataToFirebase();
@@ -209,7 +209,6 @@ public class FragmentSavedLocation extends Fragment {
                 imageCard.setVisibility(View.GONE);
                 sharedViewModel.setBikePictureTaken("false");
                 sharedViewModel.setBikePicture(null);
-                DeletePhotoFromFirebase();
             }
         });
 
@@ -218,11 +217,11 @@ public class FragmentSavedLocation extends Fragment {
         deleteNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                noteText.setText("");
                 Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
                 addNoteBtn.setVisibility(View.VISIBLE);
                 CardView noteCard = getView().findViewById(R.id.noteCard);
                 noteCard.setVisibility(View.GONE);
-                sharedViewModel.setNote("");
             }
         });
 
@@ -231,19 +230,12 @@ public class FragmentSavedLocation extends Fragment {
         noteText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
              @Override
              public void onFocusChange(View v, boolean hasFocus) {
-
                  // When focus is lost check that the text field has valid values.
-
                  if (!hasFocus) {
-                     note = noteText.getText().toString();
-                     if(note != null && !note.isEmpty()) {
-                         //sharedViewModel.setNote(note);
-                     } else {
-                         Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
-                         addNoteBtn.setVisibility(View.VISIBLE);
-                         CardView noteCard = getView().findViewById(R.id.noteCard);
-                         noteCard.setVisibility(View.GONE);
-                     }
+                     Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
+                     addNoteBtn.setVisibility(View.VISIBLE);
+                     CardView noteCard = getView().findViewById(R.id.noteCard);
+                     noteCard.setVisibility(View.GONE);
                  }
              }
          });
@@ -311,9 +303,6 @@ public class FragmentSavedLocation extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
-    //Camera feature
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -327,7 +316,6 @@ public class FragmentSavedLocation extends Fragment {
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
-        sharedViewModel.setBikePicture(image);
         return image;
     }
 
@@ -363,7 +351,8 @@ public class FragmentSavedLocation extends Fragment {
         mediaScanIntent.setData(contentUri);
         getActivity().sendBroadcast(mediaScanIntent);
 
-        uploadFile(contentUri);
+        sharedViewModel.setBikePicture(f);
+        sharedViewModel.setBikePictureTaken("true");
     }
 
     @Override
@@ -382,7 +371,7 @@ public class FragmentSavedLocation extends Fragment {
         }
     }
 
-    private void uploadFile(Uri file){
+    private void uploadPhoto(Uri file){
         StorageReference storageReference = mStorageRef.child("images/users/" + userID + "/bike.jpg");
         storageReference.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -400,11 +389,17 @@ public class FragmentSavedLocation extends Fragment {
     }
 
     private void uploadDataToFirebase () {
+        if(sharedViewModel.getBikePicture() != null) {
+            uploadPhoto(Uri.fromFile(sharedViewModel.getBikePicture()));
+        }
         //Firebase real time
         mDatabaseRef.child("users").child(userID).child("address").setValue(sharedViewModel.getAddress());
         mDatabaseRef.child("users").child(userID).child("date").setValue(sharedViewModel.getDateandtime());
-        if(sharedViewModel.getNote() != null && !sharedViewModel.getNote().isEmpty()){
+        if(sharedViewModel.getNote() != null){
             mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
+        }
+        if(sharedViewModel.getBikePictureTaken().isEmpty()){
+            sharedViewModel.setBikePictureTaken("false");
         }
         mDatabaseRef.child("users").child(userID).child("picture").setValue(sharedViewModel.getBikePictureTaken());
     }
@@ -437,23 +432,4 @@ public class FragmentSavedLocation extends Fragment {
             });
         }
     }
-
-    private void DeletePhotoFromFirebase(){
-        //DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-        StorageReference bikeRef = FirebaseStorage.getInstance().getReference("/images/users/"+userID+"/bike.jpg");
-
-        bikeRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // File deleted successfully
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Uh-oh, an error occurred!
-                System.out.println(exception.getMessage());
-            }
-        });
-    }
-
 }
