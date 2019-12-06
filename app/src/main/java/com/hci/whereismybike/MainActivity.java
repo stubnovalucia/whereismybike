@@ -3,6 +3,8 @@ package com.hci.whereismybike;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -15,17 +17,10 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Map;
-
 
 /**
  * MainActivity class: activity that is opened when the app is launched.
@@ -45,30 +40,6 @@ public class MainActivity extends AppCompatActivity  implements
         FragmentRetrieveLocation.OnFragmentInteractionListener,
         FragmentSignIn.OnFragmentInteractionListener {
 
-    private SharedViewModel sharedViewModel;
-
-    private DatabaseReference mDatabaseRef;
-    private String userID;
-
-    private ValueEventListener valueEvent = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            if(!dataSnapshot.hasChild(userID)){
-                System.out.println("EMPTY");
-                sharedViewModel.setSavedBike(false);
-
-            } else {
-                System.out.println("FRAGMENT MAIN");
-                // GetData();
-            }
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +54,7 @@ public class MainActivity extends AppCompatActivity  implements
         }
 
         //Temporary code for conditional rendering
-        sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         sharedViewModel.setSavedBike(false);
 
         //Checks if signed in - modified code from: https://stackoverflow.com/a/53992737

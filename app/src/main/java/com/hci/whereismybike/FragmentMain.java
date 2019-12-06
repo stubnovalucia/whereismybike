@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,13 +111,6 @@ public class FragmentMain extends Fragment {
             }
         });
 
-        //Conditional navigation
-//        if (sharedViewModel.getSavedBike().getValue()) {
-//            markLocationButton.setText(getResources().getString(R.string.show_it_button));
-//        } else {
-//            markLocationButton.setText(getResources().getString(R.string.mark_it_button));
-//        }
-
         //listener for settings icon
         ImageView settingsCog = view.findViewById(R.id.settingsCog);
         settingsCog.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +140,22 @@ public class FragmentMain extends Fragment {
         if(sharedViewModel.getmGoogleSignInClient() == null){
             sharedViewModel.setmGoogleSignInClient(GoogleSignIn.getClient(getActivity(), gso));
         }
+
+        //Disable the back button
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -185,13 +195,6 @@ public class FragmentMain extends Fragment {
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>(){};
-                //Map<String, String> dataMap = dataSnapshot.getValue(genericTypeIndicator);
-//                sharedViewModel.setAddress(dataMap.get("address"));
-//                sharedViewModel.setDateandtime(dataMap.get("date"));
-//                sharedViewModel.setNote(dataMap.get("note"));
-//                sharedViewModel.setBikePictureTaken(dataMap.get("picture"));
-
                 sharedViewModel.setAddress(dataSnapshot.child("address").getValue(String.class));
                 sharedViewModel.setDateandtime(dataSnapshot.child("date").getValue(String.class));
                 sharedViewModel.setNote(dataSnapshot.child("note").getValue(String.class));
