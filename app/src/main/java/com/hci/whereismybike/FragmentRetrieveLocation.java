@@ -103,8 +103,6 @@ public class FragmentRetrieveLocation extends Fragment {
         if(sharedViewModel.getAddress().equals("")){
             GetData();
         }
-
-        GetPicture();
     }
 
     @Override
@@ -175,6 +173,9 @@ public class FragmentRetrieveLocation extends Fragment {
         });
 
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
+        if (sharedViewModel.getBikePictureTaken()){
+            GetPicture();
+        }
 
         EditText address = view.findViewById(R.id.address);
         address.setText(sharedViewModel.getAddress());
@@ -234,7 +235,9 @@ public class FragmentRetrieveLocation extends Fragment {
     public void GetPicture () {
         try{
             Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
+            return;
         }catch (Exception e){
+            System.out.println("EXCEPTION");
             System.out.println(e.getMessage());
             try {
                 // Create an image file name
