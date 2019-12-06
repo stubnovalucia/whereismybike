@@ -72,6 +72,7 @@ public class FragmentSavedLocation extends Fragment {
     private File map;
 
     private String currentPhotoPath;
+    private String note;
 
     public FragmentSavedLocation() {
         // Required empty public constructor
@@ -131,8 +132,9 @@ public class FragmentSavedLocation extends Fragment {
             public void onClick(View view) {
                 Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
                 addNoteBtn.setVisibility(View.GONE);
-                CardView imageCard = getView().findViewById(R.id.noteCard);
-                imageCard.setVisibility(View.VISIBLE);
+                CardView noteCard = getView().findViewById(R.id.noteCard);
+                noteCard.setVisibility(View.VISIBLE);
+                noteCard.requestFocus();
             }
         });
 
@@ -143,29 +145,28 @@ public class FragmentSavedLocation extends Fragment {
             public void onClick(View view) {
                 uploadDataToFirebase();
                 sharedViewModel.setSavedBike(true);
-                
-                // find the CoordinatorLayout id
-                // Make and display Snackbar
+
+                Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
+
+                // Snackbar for location confirmation
                 Snackbar snackbar = Snackbar.make(view, "Location saved",
-                                Snackbar.LENGTH_LONG);
+                        Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //TODO
-                            }
-                        });
+                    @Override
+                    public void onClick(View v) {
+                        sharedViewModel.setSavedBike(false);
+                        getActivity().onBackPressed();
+                        //Navigation.findNavController(v).navigate(R.id.action_fragmentMain_to_savedLocationFragment);
+                    }
+                });
                 snackbar.setActionTextColor(getResources().getColor(R.color.white));
                 View sbView = snackbar.getView();
                 sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.lightGreen));
                 snackbar.show();
-                // Set action with Retry Listener
-                //snackbar.setAction("Undo"/*, new TryAgainListener()*/);
-                // show the Snackbar
-                //snackbar.show();
-                Navigation.findNavController(view).navigate(R.id.action_savedLocationFragment_to_fragmentMain);
             }
         });
 
+        //listener for delete photo button
         ImageButton deletePhotoButton = view.findViewById(R.id.deletePhoto);
         deletePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,16 +178,39 @@ public class FragmentSavedLocation extends Fragment {
             }
         });
 
+        //listener for delete note button
         ImageButton deleteNoteButton = view.findViewById(R.id.deleteNote);
         deleteNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
                 addNoteBtn.setVisibility(View.VISIBLE);
-                CardView imageCard = getView().findViewById(R.id.noteCard);
-                imageCard.setVisibility(View.GONE);
+                CardView noteCard = getView().findViewById(R.id.noteCard);
+                noteCard.setVisibility(View.GONE);
             }
         });
+
+        //note changes
+        final EditText noteText = view.findViewById(R.id.noteText);
+        noteText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+             @Override
+             public void onFocusChange(View v, boolean hasFocus) {
+
+                 // When focus is lost check that the text field has valid values.
+
+                 if (!hasFocus) {
+                     note = noteText.getText().toString();
+                     if(note != null && !note.isEmpty()) {
+                         sharedViewModel.setNote(note);
+                     } else {
+                         Button addNoteBtn = getView().findViewById(R.id.addNoteButton);
+                         addNoteBtn.setVisibility(View.VISIBLE);
+                         CardView noteCard = getView().findViewById(R.id.noteCard);
+                         noteCard.setVisibility(View.GONE);
+                     }
+                 }
+             }
+         });
 
         mapView = view.findViewById(R.id.mapView);
         bikePhotoView = view.findViewById(R.id.bikePhotoView);
@@ -354,10 +378,10 @@ public class FragmentSavedLocation extends Fragment {
         //Firebase real time
         mDatabaseRef.child("users").child(userID).child("address").setValue(sharedViewModel.getAddress());
         mDatabaseRef.child("users").child(userID).child("date").setValue(sharedViewModel.getDateandtime());
-        mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
-//        if(note != null){
-//            mDatabaseRef.child("users").child(userID).child("date").child("note").setValue("lol lol lol");
-//        }
+        //mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
+        if(sharedViewModel.getNote() != null && !sharedViewModel.getNote().isEmpty()){
+            mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
+        }
     }
     public void GetMap () {
         try {

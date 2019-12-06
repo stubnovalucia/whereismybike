@@ -148,6 +148,7 @@ public class FragmentRetrieveLocation extends Fragment {
 
         //listener for found it button
         FloatingActionButton getDirectionsButton = view.findViewById(R.id.getDirectionsButton);
+        //code modified from: https://stackoverflow.com/questions/2662531/launching-google-maps-directions-via-an-intent-on-android/44365894#44365894
         getDirectionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,14 +164,6 @@ public class FragmentRetrieveLocation extends Fragment {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
-
-//            //Launches Google Maps navigation
-//            Uri gmmIntentUri = Uri.parse("google.navigation:w=56.1536274,10.2118649"); //location
-//            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//            mapIntent.setPackage("com.google.android.apps.maps");
-//            if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                startActivity(mapIntent);
-//            }
             }
         });
 
@@ -181,6 +174,9 @@ public class FragmentRetrieveLocation extends Fragment {
 
         TextView date = view.findViewById(R.id.date);
         date.setText(sharedViewModel.getDateandtime());
+
+        TextView noteText = view.findViewById(R.id.noteText);
+        noteText.setText(sharedViewModel.getNote());
 
         mapView = view.findViewById(R.id.mapView);
         try {
