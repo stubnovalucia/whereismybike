@@ -28,6 +28,7 @@ public class SharedViewModel extends ViewModel {
     private String note;
     private File map;
     private File bikePicture;
+    private Boolean bikePictureTaken = false;
 
     public GoogleSignInClient getmGoogleSignInClient() {
         return mGoogleSignInClient;
@@ -45,9 +46,6 @@ public class SharedViewModel extends ViewModel {
 
     public void setLatLng(LatLng loc){latLng =loc;}
 
-    public LatLng getLatLng() {
-        return latLng;
-    }
 
     public void setAddress(String address) {
         this.address = address;
@@ -87,6 +85,15 @@ public class SharedViewModel extends ViewModel {
 
     public void setBikePicture(File bikePicture) {
         this.bikePicture = bikePicture;
+        setBikePictureTaken(true);
+    }
+
+    public Boolean getBikePictureTaken() {
+        return bikePictureTaken;
+    }
+
+    public void setBikePictureTaken(Boolean bikePictureTaken) {
+        this.bikePictureTaken = bikePictureTaken;
     }
 }
 

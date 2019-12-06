@@ -183,7 +183,6 @@ public class FragmentSavedLocation extends Fragment {
                     public void onClick(View v) {
                         sharedViewModel.setSavedBike(false);
                         getActivity().onBackPressed();
-                        //Navigation.findNavController(v).navigate(R.id.action_fragmentMain_to_savedLocationFragment);
                     }
                 });
                 snackbar.setActionTextColor(getResources().getColor(R.color.white));
@@ -407,10 +406,10 @@ public class FragmentSavedLocation extends Fragment {
         //Firebase real time
         mDatabaseRef.child("users").child(userID).child("address").setValue(sharedViewModel.getAddress());
         mDatabaseRef.child("users").child(userID).child("date").setValue(sharedViewModel.getDateandtime());
-        //mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
         if(sharedViewModel.getNote() != null && !sharedViewModel.getNote().isEmpty()){
             mDatabaseRef.child("users").child(userID).child("note").setValue(sharedViewModel.getNote());
         }
+        mDatabaseRef.child("users").child(userID).child("picture").setValue(sharedViewModel.getBikePictureTaken());
     }
     public void GetMap () {
         try {
