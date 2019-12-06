@@ -142,6 +142,7 @@ public class FragmentMain extends Fragment {
         }
 
         //Disable the back button
+        //https://stackoverflow.com/a/36129029
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
