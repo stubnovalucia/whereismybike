@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -176,6 +177,17 @@ public class FragmentRetrieveLocation extends Fragment {
 
         TextView date = view.findViewById(R.id.date);
         date.setText(sharedViewModel.getDateandtime());
+
+
+        if (sharedViewModel.getNote() == null || sharedViewModel.getNote().isEmpty()) {
+            CardView noteCard = getView().findViewById(R.id.noteCard);
+            noteCard.setVisibility(View.GONE);
+        }
+
+        if (sharedViewModel.getBikePicture() == null) {
+            CardView imageCard = getView().findViewById(R.id.imageCard);
+            imageCard.setVisibility(View.GONE);
+        }
 
         TextView noteText = view.findViewById(R.id.noteText);
         noteText.setText(sharedViewModel.getNote());
