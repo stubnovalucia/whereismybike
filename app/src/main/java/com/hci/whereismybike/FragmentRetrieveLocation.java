@@ -100,7 +100,7 @@ public class FragmentRetrieveLocation extends Fragment {
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
 
-        if(sharedViewModel.getAddress().equals("")){
+        if(sharedViewModel.getAddress() == null || sharedViewModel.getAddress().equals("")){
             GetData();
         }
     }
@@ -129,6 +129,7 @@ public class FragmentRetrieveLocation extends Fragment {
                 alertDialogBuilder.setPositiveButton(R.string.found_it, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         sharedViewModel.setSavedBike(false);
+                        DeleteEntryFromFirebase();
                         Navigation.findNavController(getView()).navigate(R.id.action_fragmentRetrieveLocation_to_fragmentMain);
                     }
                 });
@@ -157,7 +158,7 @@ public class FragmentRetrieveLocation extends Fragment {
                     .appendPath("dir")
                     .appendPath("")
                     .appendQueryParameter("api", "1")
-                    .appendQueryParameter("destination", sharedViewModel.getLatLng().latitude + "," + sharedViewModel.getLatLng().longitude);
+                    .appendQueryParameter("destination", sharedViewModel.getAddress());
             String url = builder.build().toString();
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
@@ -228,7 +229,7 @@ public class FragmentRetrieveLocation extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void GetPicture () {
+    private void GetPicture () {
         try{
             Glide.with(getActivity()).load(Uri.fromFile(sharedViewModel.getBikePicture())).into(bikePhotoView);
             return;
@@ -263,7 +264,7 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         }
     }
-    public void GetData(){
+    private void GetData(){
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -272,6 +273,7 @@ public class FragmentRetrieveLocation extends Fragment {
                 sharedViewModel.setAddress(dataMap.get("address"));
                 sharedViewModel.setDateandtime(dataMap.get("date"));
                 sharedViewModel.setNote(dataMap.get("note"));
+                sharedViewModel.setBikePictureTaken(dataMap.get("picture").equals("true"));
             }
 
             @Override
@@ -280,7 +282,7 @@ public class FragmentRetrieveLocation extends Fragment {
             }
         });
     }
-    public void GetMap () {
+    private void GetMap () {
         try {
             // Create an image file name
             String imageFileName = "map";
@@ -307,5 +309,8 @@ public class FragmentRetrieveLocation extends Fragment {
                 }
             });
         }
+    }
+    private void DeleteEntryFromFirebase(){
+        mDatabaseRef.child("users").child(userID).removeValue();
     }
 }

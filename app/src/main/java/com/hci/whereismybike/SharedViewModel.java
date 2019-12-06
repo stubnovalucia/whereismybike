@@ -46,9 +46,6 @@ public class SharedViewModel extends ViewModel {
 
     public void setLatLng(LatLng loc){latLng =loc;}
 
-    public LatLng getLatLng() {
-        return latLng;
-    }
 
     public void setAddress(String address) {
         this.address = address;
